@@ -1,11 +1,10 @@
 module Mensagens where
-import Data.List
 import System.IO
+import Util
 
 menuPrincipal :: IO ()
 menuPrincipal = do
-    putStr("\nMenu Principal")
-    putStr("\nEscolha uma opcao")
+    putStr("\nEscolha uma opcao para prosseguir")
     putStr("\n[1] Area do cliente")
     putStr("\n[2] Area do funcionario")
     putStr("\n[3] Area da empresa")
@@ -13,8 +12,8 @@ menuPrincipal = do
 
 opcaoInvalida :: IO ()
 opcaoInvalida = do
-    putStr("\nERRO: Escolha uma opção válida\n")
+    putStr("\nERRO: Escolha uma opcao valida\n\n")
 
 mensagemSaida :: IO ()
 mensagemSaida = do
-    putStr("\nAté mais!")
+    putStr("\nAté mais!\n")
