@@ -32,16 +32,16 @@ logaFuncionario menu = do
     putStr"Opção: "
     op <- Util.lerEntradaString
     if op == "1"
-        then do {Util.exibirAssentos; loginFuncionario menu}
+        then do {Util.exibirAssentos; logaFuncionario menu}
     else if op == "2"
-        then do {vagaOcupadaCliente; loginFuncionario menu}
+        then do {escolheAssento; logaFuncionario menu}
     else if op == "3"
-        then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario menu}
+        then do {Mensagens.exibirListaClientesCadastrados; logaFuncionario menu}
     else if op == "4"
-        then do {excluirCliente menu; loginFuncionario menu}
+        then do {excluirCliente menu; logaFuncionario menu}
     else if op == "5"
         then do calcularValorPassagem menu
     else if op == "6"
         then do menu
     else do
-        {Mensagens.opcaoInvalida; loginFuncionario menu}
+        {Mensagens.opcaoInvalida; logaFuncionario menu}
