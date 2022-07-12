@@ -1,6 +1,7 @@
 module Util where
 import System.IO
 import Data.List
+  
 
 lerEntradaString :: IO String
 lerEntradaString = do
@@ -105,6 +106,14 @@ escolheAssento cpf = do
 escreveCliente :: String -> IO()
 escreveCliente n = do
 
+    arq <- openFile "arquivos/clientes.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+cadastraCliente :: IO()
+cadastraCliente = do
+    n <- lerEntradaString 
     arq <- openFile "arquivos/clientes.txt" WriteMode
     hPutStr arq n
     hFlush arq

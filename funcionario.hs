@@ -39,8 +39,10 @@ logaFuncionario menu = do
     else if op == "4"
         then do {excluirCliente menu; logaFuncionario menu}
     else if op == "5"
-        then do calcularValorPassagem menu
+        then do {calcularValorPassagem menu}
     else if op == "6"
+        then do {Util.cadastraCliente}
+    else if op == "7"
         then do menu
     else do
         {Mensagens.opcaoInvalida; logaFuncionario menu}
@@ -132,14 +134,14 @@ calculo cpf = do
     else do
 
         let getVaga = Util.getIndiceCpv(Util.getVagaCpv cpf lista) ++ "," ++ "\n"
-        appendFile "arquivos/assentos.txt" (getVaga)
+        appendFile "arquivos/assentos.txt" getVaga
 
         Util.escreverCpv (primeiraCpv (Util.opcaoAssento cpf lista))
 
         Util.escreverHorarioCpf (primeiraCpv (Util.opcaoAssento cpf lista))
 
         arqClientes <- readFile "arquivos/clientes.txt"
-        let lista2 = (Data.List.map (split(==',') ) (lines arqClientes))
+        let lista2 = Data.List.map (split(==',') ) (lines arqClientes)
 
         valor <- readFile "arquivos/valorAssento.txt"
         let lista3 = lines valor
