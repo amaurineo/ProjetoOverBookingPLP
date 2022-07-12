@@ -91,3 +91,7 @@ cadastrarNome :: IO()
 cadastrarNome = do
     putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
     putStr("\nInforme o nome: ")
+
+funcionarioExcluido :: IO()
+funcionarioExcluido = do
+    putStr("\nFUNCIONÁRIO EXCLUIDO COM SUCESSO!")

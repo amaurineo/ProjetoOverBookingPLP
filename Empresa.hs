@@ -14,13 +14,13 @@ menuEmpresa menu = do
 
                 if funcionalidade == "1"
                     then do cadastroDeFuncionario menu
-                else if funcionalidade == "2"
-                    then do {}
+               {-else if funcionalidade == "2"
+                    then do {}-}
                 else if funcionalidade == "3"
                     then do excluirFuncionario menu
                 else if funcionalidade == "4"
                     then do listaTodosFuncionarios menu
-                else if funcionalidade == "5"
+                {-else if funcionalidade == "5"
                     then do listaTodosAssentosDisponiveis menu
                 else if funcionalidade == "6"
                     then do {}
@@ -41,9 +41,9 @@ menuEmpresa menu = do
                 else if funcionalidade == "14"
                   then do {}
                 else if funcionalidade == "15"
-                  then do menu
+                  then do menu-}
                 else do
-                  {putStrLn("\nError: OPÇÃO INVÁLIDA\n"); menuEmpresa menu}
+                  {putStrLn("\nError: OPÇÃO INVÁLIDA\n"); Empresa.menuEmpresa menu}
 
                 
 -- Cadastrado de funcionario na empresa
@@ -59,14 +59,12 @@ cadastroDeFuncionario menu = do
                 let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arquivo)))
 
                 if (Util.temCadastro cpf lista)
-                    then do {Mensagens.usuarioCadastrado; cadastroDeFuncionario menu}
+                    then do {Mensagens.usuarioNaoCadastrado; cadastroDeFuncionario menu}
                 else do
                     let funcionarioString = cpf ++ "," ++ nome ++ "\n"
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
                     Mensagens.cadastroEfetuado
 
--- Alterar Funcionario
---alterarFuncionario:: (IO()) -> IO()
 
 -- Exclusão de um funcionario do sistema da empresa
 getLinesFuncionarios :: Handle -> IO [String]
@@ -75,8 +73,8 @@ getLinesFuncionarios h = hGetContents h >>= return . lines
 excluirFuncionario:: (IO()) -> IO()
 excluirFuncionario menu = do
                 arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
-                linhasFunc <- getLines arquivo
-                let listaDeFunc <- ((Data.List.map (split(==',') ) linhasFunc))
+                linhasFunc <- getLinesFuncionarios arquivo
+                let listaDeFunc = ((Data.List.map (split(==',') ) linhasFunc))
                 putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
                 print(listaDeFunc)
 
@@ -85,22 +83,29 @@ excluirFuncionario menu = do
 
                 if not (Util.temCadastro cpf listaDeFunc)
                     then do Mensagens.usuarioInvalido
+                else
+                    Mensagens.funcionarioExcluido
+                  
                 
--- Lista todos os funcionarios
+--Lista todos os funcionarios
 listaTodosFuncionarios :: (IO()) -> IO()
 listaTodosFuncionarios menu = do
+                print(listaFuncionarios)
+
+--Lista todos os funcionarios
+listaFuncionarios :: IO()
+listaFuncionarios  = do
                 arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
-                linhasFunc <- getLines arquivo
-                let listaDeFunc <- ((Data.List.map (split(==',') ) linhasFunc))
+                linhasFunc <- getLinesFuncionarios arquivo
+                let listaDeFunc = ((Data.List.map (split(==',') ) linhasFunc))
                 putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
                 print(listaDeFunc)
 
-
--- Listar assentos executivos e econômico disponíveis
+{- Listar assentos executivos e econômico disponíveis
 listaTodosAssentosDisponiveis:: (IO() -> IO)
 listaTodosAssentosDisponiveis menu = do
                 arquivo <- openFile "arquivos/assentos.txt" ReadMode
                 linhasAssentos <- getLines arquivo
-                let listaDeAssentos <- ((Data.List.map (split(==',') ) linhasAssentos))
+                let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
                 putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: ")
-                print(listaDeAssentos)
+                print(listaDeAssentos)-}
