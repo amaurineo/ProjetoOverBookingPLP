@@ -11,8 +11,8 @@ cpfFuncionario = do
 
 -- Verifica se o cpf está cadastrado no sistema
 verificaFuncionario :: (IO()) -> IO()
-verificaFuncionario menu = do
-    Mensagens.getCpf 
+verificaFuncionario menu = do 
+    cpfFuncionario
     cpf <- Util.lerEntradaString
 
     arq <- readFile "arquivos/funcionarios.txt"
@@ -51,7 +51,7 @@ escolheAssento = do
     Mensagens.getCpf
     cpf <- Util.lerEntradaString
 
-    arq <- readFile "arquivos/cpv.txt"
+    arq <- readFile "arquivos/cpf-assento.txt"
     let lista = Data.List.map (Util.split(==',') ) (lines arq)
 
     arq2 <- readFile "arquivos/clientes.txt"
