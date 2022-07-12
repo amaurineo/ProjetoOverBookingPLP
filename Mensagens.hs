@@ -84,7 +84,7 @@ menuEmpresa = do
     putStrLn("[15] Voltar ao menu principal\n")
 
 cadastroEfetuado :: IO()
-cadastradoEfetuado = do
+cadastroEfetuado = do
     putStr("\nCADASTRADO EFETUADO COM SUCESSO!")
 
 cadastrarNome :: IO()

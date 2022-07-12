@@ -59,7 +59,7 @@ cadastroDeFuncionario menu = do
                 let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arquivo)))
 
                 if (Util.temCadastro cpf lista)
-                    then do {Mensagens.usuarioCadastrado, cadastroDeFuncionario menu}
+                    then do {Mensagens.usuarioCadastrado; cadastroDeFuncionario menu}
                 else do
                     let funcionarioString = cpf ++ "," ++ nome ++ "\n"
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
@@ -104,5 +104,3 @@ listaTodosAssentosDisponiveis menu = do
                 let listaDeAssentos <- ((Data.List.map (split(==',') ) linhasAssentos))
                 putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: ")
                 print(listaDeAssentos)
-
-

@@ -1,6 +1,7 @@
 import Mensagens
 import Util
 import Funcionario
+import Empresa
 
 main :: IO ()
 main = do

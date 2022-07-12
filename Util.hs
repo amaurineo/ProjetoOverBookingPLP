@@ -74,11 +74,9 @@ escolheAssento cpf = do
     
     if lista == []
         then do print ("Não há vagas")
-    --else
-       -- do
-    
-    print (ordenarLista (parseDicToList (lista)))
-    putStr"\nQual assento você deseja? "
+    else
+        print (ordenarLista (parseDicToList (lista))) >>
+        putStr "\nQual assento você deseja?" 
 
     assento <- lerEntradaString
     let lista2 = opcaoAssento assento lista
