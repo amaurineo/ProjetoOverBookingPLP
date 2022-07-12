@@ -43,7 +43,7 @@ menuEmpresa menu = do
                 else if funcionalidade == "15"
                   then do menu
                 else do
-                  {putStrLn("\nError: OPÇÃO INVÁLIDA\n")}
+                  {putStrLn("\nError: OPÇÃO INVÁLIDA\n"); menuEmpresa menu}
 
                 
 -- Cadastrado de funcionario na empresa
@@ -63,6 +63,7 @@ cadastroDeFuncionario menu = do
                 else do
                     let funcionarioString = cpf ++ "," ++ nome ++ "\n"
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
+                    Mensagens.cadastroEfetuado
 
 -- Alterar Funcionario
 --alterarFuncionario:: (IO()) -> IO()
