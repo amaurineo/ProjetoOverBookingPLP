@@ -65,3 +65,18 @@ cadastroDeFuncionario menu = do
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
 
 
+-- Exclusão de um funcionario do sistema da empresa
+excluirFuncionario:: (IO()) -> IO()
+excluirFuncionario menu = do
+                arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
+                linhasFunc <- getLines arquivo
+                let listaDeFunc <- ((Data.List.map (split(==',') ) linhasFunc))
+                putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
+                print(listaDeFunc)
+
+                putStr("\nInforme o CPF do funcionário que deseja excluir: ")
+                cpf <- Util.lerEntradaString
+
+                if not (Util.temCadastro cpf listaDeFunc)
+                    then do Mensagens.usuarioInvalido
+                
