@@ -74,8 +74,8 @@ escolheAssento cpf = do
     
     if lista == []
         then do print ("Não há vagas")
-    else
-        do
+    --else
+       -- do
     
     print (ordenarLista (parseDicToList (lista)))
     putStr"\nQual assento você deseja? "

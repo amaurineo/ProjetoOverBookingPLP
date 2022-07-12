@@ -1,3 +1,4 @@
+module Empresa where
 import Funcionario
 import Util
 import Mensagens
@@ -6,7 +7,7 @@ import Data.List
 
 
 --- Chama uma das funcionalidades do menu da empresa
-menuEmpresa:: (IO()) -> IO ()
+menuEmpresa:: (IO()) -> IO()
 menuEmpresa menu = do
                 Mensagens.menuEmpresa
                 funcionalidade <- Util.lerEntradaString
@@ -16,11 +17,11 @@ menuEmpresa menu = do
                 else if funcionalidade == "2"
                     then do {}
                 else if funcionalidade == "3"
-                    then do {}
+                    then do excluirFuncionario menu
                 else if funcionalidade == "4"
-                    then do {}
+                    then do listaTodosFuncionarios menu
                 else if funcionalidade == "5"
-                    then do {}
+                    then do listaTodosAssentosDisponiveis menu
                 else if funcionalidade == "6"
                     then do {}
                 else if funcionalidade == "7"
@@ -42,10 +43,9 @@ menuEmpresa menu = do
                 else if funcionalidade == "15"
                   then do menu
                 else do
-                  {{putStrLn("\nError: OPÇÃO INVÁLIDA\n"); }
+                  {putStrLn("\nError: OPÇÃO INVÁLIDA\n")}
 
                 
-
 -- Cadastrado de funcionario na empresa
 cadastroDeFuncionario:: (IO()) -> IO()
 cadastroDeFuncionario menu = do
@@ -64,8 +64,13 @@ cadastroDeFuncionario menu = do
                     let funcionarioString = cpf ++ "," ++ nome ++ "\n"
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
 
+-- Alterar Funcionario
+--alterarFuncionario:: (IO()) -> IO()
 
 -- Exclusão de um funcionario do sistema da empresa
+getLinesFuncionarios :: Handle -> IO [String]
+getLinesFuncionarios h = hGetContents h >>= return . lines
+
 excluirFuncionario:: (IO()) -> IO()
 excluirFuncionario menu = do
                 arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
@@ -80,3 +85,23 @@ excluirFuncionario menu = do
                 if not (Util.temCadastro cpf listaDeFunc)
                     then do Mensagens.usuarioInvalido
                 
+-- Lista todos os funcionarios
+listaTodosFuncionarios :: (IO()) -> IO()
+listaTodosFuncionarios menu = do
+                arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
+                linhasFunc <- getLines arquivo
+                let listaDeFunc <- ((Data.List.map (split(==',') ) linhasFunc))
+                putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
+                print(listaDeFunc)
+
+
+-- Listar assentos executivos e econômico disponíveis
+listaTodosAssentosDisponiveis:: (IO() -> IO)
+listaTodosAssentosDisponiveis menu = do
+                arquivo <- openFile "arquivos/assentos.txt" ReadMode
+                linhasAssentos <- getLines arquivo
+                let listaDeAssentos <- ((Data.List.map (split(==',') ) linhasAssentos))
+                putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: ")
+                print(listaDeAssentos)
+
+
