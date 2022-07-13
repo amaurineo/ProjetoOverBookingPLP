@@ -41,7 +41,7 @@ logaFuncionario menu = do
     else if op == "5"
         then do {calcularValorPassagem menu}
     else if op == "6"
-        then do {Util.cadastraCliente}
+        then do {Util.cadastraCliente; logaFuncionario menu}
     else if op == "7"
         then do menu
     else do

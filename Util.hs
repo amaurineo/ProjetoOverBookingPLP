@@ -115,7 +115,8 @@ cadastraCliente :: IO()
 cadastraCliente = do
     n <- lerEntradaString 
     contents <- readFile "arquivos/clientes.txt"
-    let newContents = n ++ "," ++ contents 
+    let newContents = n ++ "," ++ contents
+    print newContents
     writeFile "arquivos/clientes.txt" newContents
 
 
