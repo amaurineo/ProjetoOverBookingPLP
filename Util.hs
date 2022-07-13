@@ -114,10 +114,10 @@ escreveCliente n = do
 cadastraCliente :: IO()
 cadastraCliente = do
     n <- lerEntradaString 
-    arq <- openFile "arquivos/clientes.txt" WriteMode
-    hPutStr arq n
-    hFlush arq
-    hClose arq
+    contents <- readFile "arquivos/clientes.txt"
+    let newContents = n ++ "," ++ contents
+    print newContents
+    writeFile "arquivos/clientes.txt" newContents
 
 
 primeiraCliente :: [[String]] -> String
