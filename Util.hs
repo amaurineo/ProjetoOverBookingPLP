@@ -110,6 +110,14 @@ escreveCliente n = do
     hFlush arq
     hClose arq
 
+cadastraCliente :: IO()
+cadastraCliente = do
+    n <- lerEntradaString 
+    arq <- openFile "arquivos/clientes.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
 
 primeiraCliente :: [[String]] -> String
 primeiraCliente [] = ""
@@ -175,3 +183,59 @@ escreverHorarioCpf n = do
     hPutStr arq n
     hFlush arq
     hClose arq
+
+
+-- Parte Relacionada a Cliente 👪
+reescreveVagas :: IO()
+reescreveVagas = do
+    putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
+    arq <- readFile "arquivos/vagas.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+
+    print ((ordenarLista (parseDicToList (lista))))
+
+wordsWhen :: (Char -> Bool) -> String -> [String]
+wordsWhen p s =  case dropWhile p s of
+                        "" -> []
+                        s' -> w : wordsWhen p s''
+                            where (w, s'') = break p s' 
+
+ehCadastrado :: String -> [[String]] -> Bool
+ehCadastrado _ [] = False
+ehCadastrado c (x:xs) | ((headCadastrado c x) == False) = ehCadastrado c xs
+                      | otherwise = True
+
+escreverUsoDoContrato :: String -> IO()
+escreverUsoDoContrato n = do
+
+    arq <- openFile "arquivos/usoDoContrato.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+contrato :: String -> [[String]] -> [[String]]
+contrato _ [] = []
+contrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) + 1))):(x !! 2):[]):contrato cpf xs
+                    | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):contrato cpf xs
+
+toInt2 :: String -> Int
+toInt2 s = read (s) :: Int
+
+toString :: Int -> String
+toString n = show (n)
+
+--- Renova um contrato
+renovarContrato :: String -> [[String]] -> [[String]]
+renovarContrato _ [] = []
+renovarContrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) * 0))):(x !! 2):[]):renovarContrato cpf xs
+                    | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):renovarContrato cpf xs
+
+escreverContratos :: String -> IO()
+escreverContratos n = do
+
+    arq <- openFile "arquivos/contratos.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+                        
