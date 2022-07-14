@@ -123,4 +123,8 @@ funcionarioExcluido = do
 
 clienteExcluido :: IO()
 clienteExcluido = do
-    putStr("\nCLIENTE EXCLUIDO COM SUCESSO!")   
+    putStr("\nCLIENTE EXCLUIDO COM SUCESSO!") 
+    
+clienteAlterado :: IO()
+clienteAlterado = do
+    putStr("\nCLIENTE alterado COM SUCESSO!") 

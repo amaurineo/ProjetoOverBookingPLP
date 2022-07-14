@@ -9,7 +9,7 @@ import System.IO
       hGetContents,
       hPutStr,
       Handle,
-      IOMode(ReadMode, WriteMode) )
+      IOMode(ReadMode, WriteMode,ReadWriteMode) )
 
 --- O cliente pode acessar pelo login ou se cadastrar ---
 acessoCliente :: (IO()) -> IO()
@@ -43,7 +43,7 @@ cadastrarCliente menu = do
     if (Util.ehCadastrado cpf lista)
        then do {Mensagens.usuarioCadastrado; acessoCliente menu}
     else do
-        let clienteStr = cpf ++ "," ++ nome ++ "," ++ idade ++ "\n"
+        let clienteStr = cpf ++ "," ++ idade ++ "\n"
         appendFile "arquivos/clientes.txt" (clienteStr)
         Mensagens.cadastroEfetuado
         loginCliente menu
@@ -56,7 +56,7 @@ loginCliente menu = do
     putStrLn"Opção: "
     op <- Util.lerEntradaString
     if op == "1"
-        then do {Util.exibirAssentos; loginCliente menu} --- alterar cadastro
+        then do {alteraDadoCliente menu; loginCliente menu} --- alterar cadastro
     else if op == "2"
         then do {excluirCliente menu; loginCliente menu} --- deleta cadastro
     else if op == "3"
@@ -81,41 +81,41 @@ verificaCliente menu = do
         {Mensagens.usuarioInvalido; menu}
 
 -- alterar cadastro do cliente
-alteradaDadoCliente :: (IO()) -> IO()
-alteradaDadoCliente menu = do
-    Mensagens.alteraNomeouIdade
-    escolha <- Util.lerEntradaString
-    if(escolha == "1")
-        then do novoNome menu
-    else if(escolha == "2")
-        then do novaIdade menu
-    else do
-        Mensagens.opcaoInvalida
-        acessoCliente menu
+alteraDadoCliente :: (IO()) -> IO()
+alteraDadoCliente menu = do
+    arquivo <- readFile "arquivos/clientes.txt"
+    --linhasCliente <- getLinesClientes arquivo
 
-novoNome :: (IO()) -> IO()
-novoNome menu = do
-    putStrLn("Novo nome: ")
-    nome <- Util.lerEntradaString
+    putStr("Informe o CPF do Cliente que deseja excluir: ")
+    cpf <- Util.lerEntradaString
 
-    arq <- openFile "arquivos/clientes.txt" WriteMode
-    hPutStr arq nome
-    hFlush arq
-    hClose arq
+    let lista = ((Data.List.map (split(==',') ) (lines arquivo)))
 
-    putStr("\nNome alterado com sucesso!\n")
+    putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
+    print(lista)
 
-novaIdade :: (IO()) -> IO()
-novaIdade menu = do
-    putStrLn("Nova Idade: ")
-    idade <- Util.lerEntradaString
+    if not (Util.temCadastro cpf lista)
+        then do {Mensagens.usuarioInvalido; excluirCliente menu}     
+    else do 
+        putStrLn("Nova Idade: ")
+        idade <- Util.lerEntradaString
 
-    arq <- openFile "arquivos/clientes.txt" WriteMode
-    hPutStr arq idade
-    hFlush arq
-    hClose arq
+        let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf lista)
+        --Util.escreveCliente ""
+        --hPutStr arquivo ""
+        
 
-    putStr("\nIdade alterada com sucesso!\n")
+        ---appendFile "arquivos/clientes.txt" (clientesExc)
+        Mensagens.clienteExcluido
+        putStrLn("Até aqui não quebrou")
+        
+        
+        let clienteStr = cpf ++ "," ++ idade ++ "\n"
+        appendFile "arquivos/clientes.txt" (clienteStr)
+        --Mensagens.cadastroEfetuado
+        Mensagens.clienteAlterado
+
+        loginCliente menu
 
 -- #
 getLinesClientes :: Handle -> IO [String]
@@ -140,7 +140,7 @@ excluirCliente menu = do
                 else do 
                     let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf listaDeCliente)
                     Util.escreveCliente ""
-
+                    
                     appendFile "arquivos/clientes.txt" (clientesExc)
                     Mensagens.clienteExcluido
 
