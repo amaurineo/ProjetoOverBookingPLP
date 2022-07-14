@@ -15,9 +15,9 @@ menuEmpresa menu = do
                 if funcionalidade == "1"
                     then do cadastroDeFuncionario menu
                {-else if funcionalidade == "2"
-                    then do 
+                    then do -}
                 else if funcionalidade == "3"
-                    then do excluirFuncionario menu--}
+                    then do excluirFuncionario menu
                 else if funcionalidade == "4"
                     then do listaTodosFuncionarios menu
                 else if funcionalidade == "5"
@@ -70,7 +70,7 @@ cadastroDeFuncionario menu = do
 getLinesFuncionarios :: Handle -> IO [String]
 getLinesFuncionarios h = hGetContents h >>= return . lines
 
-{-}
+
 excluirFuncionario:: (IO()) -> IO()
 excluirFuncionario menu = do
                 arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
@@ -84,12 +84,12 @@ excluirFuncionario menu = do
                 print(cpf)
                 if not (Util.temCadastro cpf listaDeFunc)
                     then do {Mensagens.usuarioInvalido; excluirFuncionario menu}
-                else
+                else do
                     let funcionarios = Util.primeiraHorarioCpf (opcaoVaga cpf listaDeFunc)
                     Util.escreveFuncionario ""
 
                     appendFile "arquivos/funcionarios.txt" (funcionarios)
-                    Mensagens.funcionarioExcluido-}
+                    Mensagens.funcionarioExcluido
                   
                 
 --Lista todos os funcionarios
