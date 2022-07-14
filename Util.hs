@@ -4,7 +4,8 @@ import Data.List
 
 lerEntradaString :: IO String
 lerEntradaString = do
-    getLine
+    x <- getLine
+    return x
 
 
 
@@ -74,11 +75,10 @@ escolheAssento cpf = do
     
     if lista == []
         then do print ("Não há vagas")
-    else
-        do
+    else do
     
-    print (ordenarLista (parseDicToList (lista)))
-    putStr"\nQual assento você deseja? "
+        print (ordenarLista (parseDicToList (lista)))
+        putStr"\nQual assento você deseja? "
 
     assento <- lerEntradaString
     let lista2 = opcaoAssento assento lista
@@ -104,7 +104,7 @@ escolheAssento cpf = do
 
 escreveCliente :: String -> IO()
 escreveCliente n = do
-
+    
     arq <- openFile "arquivos/clientes.txt" WriteMode
     hPutStr arq n
     hFlush arq

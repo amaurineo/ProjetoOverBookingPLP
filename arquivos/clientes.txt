@@ -1,4 +1,4 @@
-1414,amauri
-4545,feijÆo
-7676,elefantinho
-1224,batatinha
+1414,amauri,12
+4545,feijao,25
+7676,elefantinho,49
+1224,batatinha,78

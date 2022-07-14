@@ -44,7 +44,8 @@ cadastrarCliente menu = do
        then do {Mensagens.usuarioCadastrado; acessoCliente menu}
     else do
         let clienteStr = cpf ++ "," ++ nome ++ "," ++ idade ++ "\n"
-        appendFile "arquivos/clientes.txt" (clienteStr)   
+        appendFile "arquivos/clientes.txt" (clienteStr)
+        Mensagens.cadastroEfetuado
         loginCliente menu
 
 --realiza o login do cliente
@@ -57,7 +58,7 @@ loginCliente menu = do
     if op == "1"
         then do {Util.exibirAssentos; loginCliente menu} --- alterar cadastro
     else if op == "2"
-        then do {excluirFuncionario menu; loginCliente menu} --- deleta cadastro
+        then do {excluirCliente menu; loginCliente menu} --- deleta cadastro
     else if op == "3"
         then do {listaTodosAssentosDisponiveis menu; loginCliente menu} --- exibir assentos disponiveis
     else if op == "4"
@@ -120,26 +121,28 @@ novaIdade menu = do
 getLinesClientes :: Handle -> IO [String]
 getLinesClientes h = hGetContents h >>= return . lines
 
-excluirFuncionario:: (IO()) -> IO()
-excluirFuncionario menu = do
+excluirCliente:: (IO()) -> IO()
+excluirCliente menu = do
+
                 arquivo <- openFile "arquivos/clientes.txt" ReadMode
                 linhasCliente <- getLinesClientes arquivo
-                let listaDeCliente = ((Data.List.map (split(==',') ) linhasCliente))
+
                 putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
-                print(listaDeCliente)
+                print(linhasCliente)
 
                 putStr("\nInforme o CPF do Cliente que deseja excluir: ")
                 cpf <- Util.lerEntradaString
-                print(cpf)
+
+                let listaDeCliente = ((Data.List.map (wordsWhen(==',') ) (linhasCliente)))
+
                 if not (Util.temCadastro cpf listaDeCliente)
-                    then do {Mensagens.usuarioInvalido; excluirFuncionario menu}
-                else do
-                    let clientes = Util.primeiraHorarioCpf (opcaoVaga cpf listaDeCliente)
+                    then do {Mensagens.usuarioInvalido; excluirCliente menu}     
+                else do 
+                    let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf listaDeCliente)
                     Util.escreveCliente ""
 
-                    appendFile "arquivos/clientes.txt" (clientes)
-                    Mensagens.funcionarioExcluido
-
+                    appendFile "arquivos/clientes.txt" (clientesExc)
+                    Mensagens.clienteExcluido
 
 
 --Listar assentos executivos e econômico disponíveis

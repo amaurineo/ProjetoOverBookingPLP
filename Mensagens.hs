@@ -64,6 +64,10 @@ valorPago cpf lista2 = do
 
 -- Parte Relacionada a Cliente 👪
 
+cadastroEfetuado :: IO()
+cadastroEfetuado = do
+    putStr("\nCADASTRADO EFETUADO COM SUCESSO!")
+
 loginouCadastroCliente :: IO()
 loginouCadastroCliente = do
     putStrLn("Bem vindo a area dos clientes! digite:")
@@ -117,6 +121,6 @@ funcionarioExcluido :: IO()
 funcionarioExcluido = do
     putStr("\nFUNCIONÁRIO EXCLUIDO COM SUCESSO!")
 
-
-
-    
+clienteExcluido :: IO()
+clienteExcluido = do
+    putStr("\nCLIENTE EXCLUIDO COM SUCESSO!")   
