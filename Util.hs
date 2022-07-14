@@ -62,8 +62,6 @@ removeMenor [] = []
 removeMenor (x:xs) | (x == getMenor(x:xs)) = xs
                    | otherwise = (x:removeMenor xs)
 
-parseToInt2 :: String -> Int
-parseToInt2 s = read (s) :: Int
 
 
 escolheAssento :: String  -> IO()
@@ -135,13 +133,7 @@ primeira [] = ""
 primeira (x:xs) = head x ++ "," ++ "\n" ++ primeira xs
 
 
-escreveAssento :: String -> IO()
-escreveAssento n = do
 
-    arq <- openFile "arquivos/assentos.txt" WriteMode
-    hPutStr arq n
-    hFlush arq
-    hClose arq
 
 auxRecomendar :: String -> [[String]] -> [[String]]
 auxRecomendar _ [] = []
@@ -165,7 +157,7 @@ escreverCpv n = do
     hFlush arq
     hClose arq
 
-
+--------------------------------------------------
 escreverHorarioCpf :: String -> IO()
 escreverHorarioCpf n = do
 
@@ -195,8 +187,28 @@ escreveFuncionario n = do
     hFlush arq
     hClose arq
 
+
 --- GERA UMA LISTA DE LISTA SEM A LISTA QUE CONTEM O STRING PASSADO COMO PARÂMETRO ---
 opcaoVaga :: String -> [[String]] -> [[String]]
 opcaoVaga _ [] = []
 opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
                    | otherwise = x:opcaoVaga v xs
+
+parseToInt2 :: String -> Int
+parseToInt2 s = read (s) :: Int
+
+escreveAssento :: String -> IO()
+escreveAssento n = do
+
+    arq <- openFile "arquivos/assentos.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreveDesconto :: String -> IO()
+escreveDesconto n = do
+
+    arq <- openFile "arquivos/descontos.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq

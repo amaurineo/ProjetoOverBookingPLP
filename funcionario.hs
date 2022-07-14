@@ -104,7 +104,6 @@ excluirCliente menu = do
         putStr"\nCliente excluído com sucesso!\n"
 
 
-
 aux :: String -> [String] -> Bool
 aux v (x:xs) = v == x
 

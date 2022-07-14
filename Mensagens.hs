@@ -62,6 +62,7 @@ valorPago cpf lista2 = do
 
     putStr("O valor a ser pago em REAIS pelo cliente " ++ Util.getNome cpf lista2 ++ " é: ")
 
+----------------------------------------------------------------------------------
 menuEmpresa :: IO()
 menuEmpresa = do
     putStrLn("\n       -----Menu da Empresa-----")
@@ -92,6 +93,44 @@ cadastrarNome = do
     putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
     putStr("\nInforme o nome: ")
 
+cadastrarIdAssento :: IO()
+cadastrarIdAssento = do
+    putStrLn("\n       -----CADASTRO DE ASSENTO-----")
+    putStr("\nInforme o ID poltrona: ")
+
+getTipo :: IO()
+getTipo = do
+    putStr"Insira o tipo da poltrona: "
+
+cadastrarDesconto :: IO()
+cadastrarDesconto = do
+    putStrLn("\n       -----CADASTRO DE Desconto-----")
+    putStr("Insira tipo da poltrona: ")
+
+    
+
 funcionarioExcluido :: IO()
 funcionarioExcluido = do
     putStr("\nFUNCIONÁRIO EXCLUIDO COM SUCESSO!")
+
+assentoExcluido :: IO()
+assentoExcluido = do
+    putStr("\nAssento EXCLUIDO COM SUCESSO!")
+
+
+getValorDoDesconto :: IO()
+getValorDoDesconto = do
+    putStr("Insira o valor do desconto: ")
+
+tipoJaCadastrado:: IO()
+tipoJaCadastrado =
+    putStrLn("\nErro: tipo já cadastrado!\n")
+
+assentoJaCadastrado:: IO()
+assentoJaCadastrado =
+    putStrLn("\nErro: tipo já cadastrado!\n")
+
+
+descontoExcluido :: IO()
+descontoExcluido = do
+    putStr("\nAssento EXCLUIDO COM SUCESSO!")
