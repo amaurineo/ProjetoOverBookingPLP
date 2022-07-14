@@ -33,7 +33,9 @@ menuFuncionario = do
     putStrLn"[3] Exibir clientes cadastrados"
     putStrLn"[4] Excluir cliente do sistema"
     putStrLn"[5] Calcular valor do assento"
-    putStrLn"[6] Voltar ao menu principal\n"
+    putStrLn"[6] listar valores dos assentos\n"
+    putStrLn"[7] Voltar ao menu principal\n"
+    
 
 
 exibirListaClientesCadastrados :: IO()
@@ -134,3 +136,4 @@ assentoJaCadastrado =
 descontoExcluido :: IO()
 descontoExcluido = do
     putStr("\nAssento EXCLUIDO COM SUCESSO!")
+

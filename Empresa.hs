@@ -55,14 +55,14 @@ cadastroDeFuncionario menu = do
                 Mensagens.getCpf
                 cpf <- Util.lerEntradaString
 
-                arquivo <- readFile "arquivos/assentos.txt"
+                arquivo <- readFile "arquivos/funcionarios.txt"
                 let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arquivo)))
 
                 if (Util.temCadastro cpf lista)
                     then do {Mensagens.usuarioNaoCadastrado; cadastroDeFuncionario menu}
                 else do
                     let funcionarioString = cpf ++ "," ++ nome ++ "\n"
-                    appendFile "arquivos/assentos.txt" (funcionarioString)
+                    appendFile "arquivos/funcionarios.txt" (funcionarioString)
                     Mensagens.cadastroEfetuado
 
 -- Altera Funcinário
@@ -228,3 +228,4 @@ valoresDeCadaTipoo menu = do
                 let listaDeValores = ((Data.List.map (split(==',') ) linhasValores))
                 putStr("\nAtualmente temos os seguintes valores relacionados aos tipos de assentos no sistema: ")
                 print(listaDeValores)
+

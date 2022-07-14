@@ -4,6 +4,7 @@ import Mensagens
 import Data.List
 import System.IO
 
+
 -- Recebe cpf do funcionário
 cpfFuncionario :: IO()
 cpfFuncionario = do
@@ -41,9 +42,12 @@ logaFuncionario menu = do
     else if op == "5"
         then do calcularValorPassagem menu
     else if op == "6"
+        then do {Funcionario.valoresDCadaTipoo menu; logaFuncionario menu}
+    else if op == "7"
         then do menu
     else do
         {Mensagens.opcaoInvalida; logaFuncionario menu}
+        
 
 escolheAssento :: IO()
 escolheAssento = do
@@ -178,3 +182,4 @@ extraInt (x:xs) | (x !! 4) == "s" = 15
 
 auxHoraCpf :: String -> [String] -> Bool
 auxHoraCpf v (x:xs) = (v == x)
+
