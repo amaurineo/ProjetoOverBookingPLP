@@ -65,7 +65,7 @@ cadastroDeFuncionario menu = do
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
                     Mensagens.cadastroEfetuado
 
-
+{-}
 -- Exclusão de um funcionario do sistema da empresa
 getLinesFuncionarios :: Handle -> IO [String]
 getLinesFuncionarios h = hGetContents h >>= return . lines
@@ -80,26 +80,27 @@ excluirFuncionario menu = do
 
                 putStr("\nInforme o CPF do funcionário que deseja excluir: ")
                 cpf <- Util.lerEntradaString
-
+                print(cpf)
                 if not (Util.temCadastro cpf listaDeFunc)
-                    then do Mensagens.usuarioInvalido
+                    then do {Mensagens.usuarioInvalido; excluirFuncionario menu}
                 else
-                    Mensagens.funcionarioExcluido
+                    let funcionarios = Util.primeiraHorarioCpf (opcaoVaga cpf listaDeFunc)
+                    Util.escreveFuncionario ""
+
+                    appendFile "arquivos/funcionarios.txt" (funcionarios)
+                    Mensagens.funcionarioExcluido-}
                   
                 
 --Lista todos os funcionarios
 listaTodosFuncionarios :: (IO()) -> IO()
 listaTodosFuncionarios menu = do
-                print(listaFuncionarios)
-
---Lista todos os funcionarios
-listaFuncionarios :: IO()
-listaFuncionarios  = do
                 arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
                 linhasFunc <- getLinesFuncionarios arquivo
                 let listaDeFunc = ((Data.List.map (split(==',') ) linhasFunc))
                 putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
                 print(listaDeFunc)
+
+
 
 {- Listar assentos executivos e econômico disponíveis
 listaTodosAssentosDisponiveis:: (IO() -> IO)

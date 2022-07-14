@@ -180,3 +180,23 @@ wordsWhen p s =  case dropWhile p s of
                       "" -> []
                       s' -> w : wordsWhen p s''
                             where (w, s'') = break p s
+
+--- FUNÇÕES QUE GERAM STRING NO FORMATO DE ESCRITA DE UM ARQUIVO ---
+primeiraHorarioCpf :: [[String]] -> String
+primeiraHorarioCpf [] = ""
+primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs
+
+
+escreveFuncionario :: String -> IO()
+escreveFuncionario n = do
+
+    arq <- openFile "arquivos/funcionarios.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+--- GERA UMA LISTA DE LISTA SEM A LISTA QUE CONTEM O STRING PASSADO COMO PARÂMETRO ---
+opcaoVaga :: String -> [[String]] -> [[String]]
+opcaoVaga _ [] = []
+opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
+                   | otherwise = x:opcaoVaga v xs
