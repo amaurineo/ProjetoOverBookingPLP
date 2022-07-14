@@ -71,7 +71,7 @@ alterarFuncionario = do
     putStr("\nQual a alteração que deseja fazer? ")
     newValue <- Util.lerEntradaString
 
-    arq <- openFile "arquivos/funcionario.txt" WriteMode
+    arq <- openFile "arquivos/funcionarios.txt" WriteMode
     hPutStr arq newValue
     hFlush arq
     hClose arq
