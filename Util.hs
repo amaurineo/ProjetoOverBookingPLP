@@ -8,7 +8,7 @@ lerEntradaString = do
 
 
 
-split     :: (Char -> Bool) -> String -> [String]
+split :: (Char -> Bool) -> String -> [String]
 split p s =  case dropWhile p s of
                       "" -> []
                       s' -> w : split p s''
@@ -238,4 +238,14 @@ escreverContratos n = do
     hFlush arq
     hClose arq
 
-                        
+primeiraHorarioCpf :: [[String]] -> String
+primeiraHorarioCpf [] = ""
+primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs
+
+--- GERA UMA LISTA DE LISTA SEM A LISTA QUE CONTEM O STRING PASSADO COMO PARÂMETRO ---
+opcaoVaga :: String -> [[String]] -> [[String]]
+opcaoVaga _ [] = []
+opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
+                   | otherwise = x:opcaoVaga v xs
+
+

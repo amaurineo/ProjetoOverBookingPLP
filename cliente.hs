@@ -3,7 +3,15 @@ import Util
 import Mensagens
 import Data.List
 import System.IO
+    ( hClose,
+      hFlush,
+      openFile,
+      hGetContents,
+      hPutStr,
+      Handle,
+      IOMode(ReadMode, WriteMode) )
 
+--- O cliente pode acessar pelo login ou se cadastrar ---
 acessoCliente :: (IO()) -> IO()
 acessoCliente menu = do
     Mensagens.loginouCadastroCliente
@@ -16,9 +24,6 @@ acessoCliente menu = do
     else do
         Mensagens.opcaoInvalida
         acessoCliente menu
-
-
-
 
 --- Cadasto de Cliente no sistema ---
 cadastrarCliente :: (IO()) -> IO()
@@ -36,16 +41,29 @@ cadastrarCliente menu = do
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
     if (Util.ehCadastrado cpf lista)
-       then do {Mensagens.usuarioCadastrado; cadastrarCliente menu}
+       then do {Mensagens.usuarioCadastrado; acessoCliente menu}
     else do
-        let clienteStr = cpf ++ "," ++ nome ++ "\n" ++ idade ++ "\n"
+        let clienteStr = cpf ++ "," ++ nome ++ "," ++ idade ++ "\n"
         appendFile "arquivos/clientes.txt" (clienteStr)   
         loginCliente menu
 
--- Recebe cpf do Cliente
-cpfCliente:: IO()
-cpfCliente = do
-    putStr "\nInforme seu CPF para fazer o login: "
+--realiza o login do cliente
+loginCliente :: (IO()) -> IO()
+loginCliente menu = do
+    Mensagens.menuCliente
+
+    putStrLn"Opção: "
+    op <- Util.lerEntradaString
+    if op == "1"
+        then do {Util.exibirAssentos; loginCliente menu} --- alterar cadastro
+    else if op == "2"
+        then do {excluirFuncionario menu; loginCliente menu} --- deleta cadastro
+    else if op == "3"
+        then do {listaTodosAssentosDisponiveis menu; loginCliente menu} --- exibir assentos disponiveis
+    else if op == "4"
+        then do menu
+    else do
+        {Mensagens.opcaoInvalida; loginCliente menu}
 
 -- Verifica se o cpf está cadastrado no sistema
 verificaCliente :: (IO()) -> IO()
@@ -61,28 +79,81 @@ verificaCliente menu = do
     else do
         {Mensagens.usuarioInvalido; menu}
 
-
---realiza o login do cliente
-loginCliente :: (IO()) -> IO()
-loginCliente menu = do
-    Mensagens.menuCliente
-
-    putStr"Opção: "
-    op <- Util.lerEntradaString
-    if op == "1"
-        then do {Util.exibirAssentos; loginCliente menu}
-    else if op == "2"
-        then do {Cliente.escolheAssento; loginCliente menu}
-    else if op == "3"
-        then do {excluirCliente menu; loginCliente menu}
-    else if op == "5"
-        then do calcularValorPassagem menu
-    else if op == "6"
-        then do menu
+-- alterar cadastro do cliente
+alteradaDadoCliente :: (IO()) -> IO()
+alteradaDadoCliente menu = do
+    Mensagens.alteraNomeouIdade
+    escolha <- Util.lerEntradaString
+    if(escolha == "1")
+        then do novoNome menu
+    else if(escolha == "2")
+        then do novaIdade menu
     else do
-        {Mensagens.opcaoInvalida; loginCliente menu}
+        Mensagens.opcaoInvalida
+        acessoCliente menu
+
+novoNome :: (IO()) -> IO()
+novoNome menu = do
+    putStrLn("Novo nome: ")
+    nome <- Util.lerEntradaString
+
+    arq <- openFile "arquivos/clientes.txt" WriteMode
+    hPutStr arq nome
+    hFlush arq
+    hClose arq
+
+    putStr("\nNome alterado com sucesso!\n")
+
+novaIdade :: (IO()) -> IO()
+novaIdade menu = do
+    putStrLn("Nova Idade: ")
+    idade <- Util.lerEntradaString
+
+    arq <- openFile "arquivos/clientes.txt" WriteMode
+    hPutStr arq idade
+    hFlush arq
+    hClose arq
+
+    putStr("\nIdade alterada com sucesso!\n")
+
+-- #
+getLinesClientes :: Handle -> IO [String]
+getLinesClientes h = hGetContents h >>= return . lines
+
+excluirFuncionario:: (IO()) -> IO()
+excluirFuncionario menu = do
+                arquivo <- openFile "arquivos/clientes.txt" ReadMode
+                linhasCliente <- getLinesClientes arquivo
+                let listaDeCliente = ((Data.List.map (split(==',') ) linhasCliente))
+                putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
+                print(listaDeCliente)
+
+                putStr("\nInforme o CPF do Cliente que deseja excluir: ")
+                cpf <- Util.lerEntradaString
+                print(cpf)
+                if not (Util.temCadastro cpf listaDeCliente)
+                    then do {Mensagens.usuarioInvalido; excluirFuncionario menu}
+                else do
+                    let clientes = Util.primeiraHorarioCpf (opcaoVaga cpf listaDeCliente)
+                    Util.escreveCliente ""
+
+                    appendFile "arquivos/clientes.txt" (clientes)
+                    Mensagens.funcionarioExcluido
 
 
+
+--Listar assentos executivos e econômico disponíveis
+getLinesAssentos :: Handle -> IO [String]
+getLinesAssentos h = hGetContents h >>= return . lines
+
+
+listaTodosAssentosDisponiveis:: (IO()) -> IO()
+listaTodosAssentosDisponiveis menu = do
+                arquivo <- openFile "arquivos/assentos.txt" ReadMode
+                linhasAssentos <- getLinesAssentos arquivo
+                let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
+                putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: \n")
+                print(listaDeAssentos)
 
 escolheAssento :: IO()
 escolheAssento = do
@@ -115,32 +186,11 @@ escolheAssento = do
         Util.escolheAssento cpf
     putStr""
 
+
+
 --TALVEZ isso cause um erro
 getlines :: Handle -> IO [String]
 getlines h = hGetContents h >>= return . lines
-
--- exclusão do cliente
-excluirCliente :: IO() -> IO()
-excluirCliente menu = do
-    putStr"Confirme seu CPF cancelar seu cadastro: "
-    cpf <- Util.lerEntradaString
-
-    arq <- openFile "arquivos/clientes.txt" ReadMode
-    xs <- getlines arq
-    let lista = Data.List.map (split(==',') ) xs
-
-    if not (Util.temCadastro cpf lista)
-        then do {Mensagens.usuarioInvalido; loginCliente menu}
-    else do
-        putStr""
-        let clientesExc = Util.primeiraCliente (Util.opcaoAssento cpf lista)
-        Util.escreveCliente ""
-
-        appendFile "arquivos/clientes.txt" clientesExc
-
-        putStr"\nCadastro excluído com sucesso!\n"
-
-
 
 aux :: String -> [String] -> Bool
 aux v (x:xs) = v == x

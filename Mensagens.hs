@@ -45,7 +45,7 @@ exibirListaClientesCadastrados = do
 
 getCpf :: IO()
 getCpf = do
-    putStr"Insira seu CPF: "
+    putStrLn"Insira seu CPF: "
 
 
 usuarioAssentoOcupado :: IO()
@@ -73,19 +73,19 @@ loginouCadastroCliente = do
 cadastrarNome :: IO()
 cadastrarNome = do
     putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
-    putStr("\nInforme o nome: ") 
+    putStrLn("\nInforme o nome: ") 
 
 informeCpf :: IO()
 informeCpf = do
-    putStr("Informe o CPF: " ++ "/n")
+    putStrLn("Informe o CPF: ")
 
 informeIdade :: IO()
 informeIdade = do
-    putStr("Informe sua Idade: ")
+    putStrLn("Informe sua Idade: ")
 
 usuarioCadastrado :: IO()
 usuarioCadastrado = do
-    putStrLn("\nErro: usuário já cadastrado!")
+    putStrLn("Erro: usuário já cadastrado!")
 
 
 menuCliente :: IO()
@@ -107,7 +107,15 @@ menuSelectAssentoCliente = do
     putStrLn"[3.5] Cancelar compra do assento"
 
 
+alteraNomeouIdade :: IO()
+alteraNomeouIdade = do
+    putStrLn("Que dado você quer alterar? digite:")
+    putStrLn("[1] Para alterar o Nome")
+    putStrLn("[2] Para alterar o endereço")
 
+funcionarioExcluido :: IO()
+funcionarioExcluido = do
+    putStr("\nFUNCIONÁRIO EXCLUIDO COM SUCESSO!")
 
 
 
