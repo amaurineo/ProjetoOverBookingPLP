@@ -41,8 +41,8 @@ logaFuncionario menu = do
         then do {excluirCliente menu; logaFuncionario menu}
     else if op == "5"
         then do calcularValorPassagem menu
-    else if op == "6"
-        then do {Funcionario.valoresDCadaTipoo menu; logaFuncionario menu}
+    {-else if op == "6"
+        then do {Funcionario.valoresDCadaTipoo menu; logaFuncionario menu}-}
     else if op == "7"
         then do menu
     else do
