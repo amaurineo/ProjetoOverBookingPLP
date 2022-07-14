@@ -14,8 +14,8 @@ menuEmpresa menu = do
 
                 if funcionalidade == "1"
                     then do cadastroDeFuncionario menu
-               {-else if funcionalidade == "2"
-                    then do -}
+                else if funcionalidade == "2"
+                    then do alterarFuncionario 
                 else if funcionalidade == "3"
                     then do excluirFuncionario menu
                 else if funcionalidade == "4"
@@ -65,6 +65,18 @@ cadastroDeFuncionario menu = do
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
                     Mensagens.cadastroEfetuado
 
+-- Altera Funcinário
+alterarFuncionario :: IO()
+alterarFuncionario = do
+    putStr("\nQual a alteração que deseja fazer? ")
+    newValue <- Util.lerEntradaString
+
+    arq <- openFile "arquivos/funcionario.txt" WriteMode
+    hPutStr arq newValue
+    hFlush arq
+    hClose arq
+
+    putStr("\nFuncionário alterado com sucesso!\n")
 
 -- Exclusão de um funcionario do sistema da empresa
 getLinesFuncionarios :: Handle -> IO [String]
