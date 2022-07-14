@@ -15,14 +15,14 @@ menuEmpresa menu = do
                 if funcionalidade == "1"
                     then do cadastroDeFuncionario menu
                {-else if funcionalidade == "2"
-                    then do {}-}
+                    then do 
                 else if funcionalidade == "3"
-                    then do excluirFuncionario menu
+                    then do excluirFuncionario menu--}
                 else if funcionalidade == "4"
                     then do listaTodosFuncionarios menu
-                {-else if funcionalidade == "5"
+                else if funcionalidade == "5"
                     then do listaTodosAssentosDisponiveis menu
-                else if funcionalidade == "6"
+                {-else if funcionalidade == "6"
                     then do {}
                 else if funcionalidade == "7"
                     then do {}
@@ -65,11 +65,12 @@ cadastroDeFuncionario menu = do
                     appendFile "arquivos/funcionarios.txt" (funcionarioString)
                     Mensagens.cadastroEfetuado
 
-{-}
+
 -- Exclusão de um funcionario do sistema da empresa
 getLinesFuncionarios :: Handle -> IO [String]
 getLinesFuncionarios h = hGetContents h >>= return . lines
 
+{-}
 excluirFuncionario:: (IO()) -> IO()
 excluirFuncionario menu = do
                 arquivo <- openFile "arquivos/funcionarios.txt" ReadMode
@@ -101,12 +102,15 @@ listaTodosFuncionarios menu = do
                 print(listaDeFunc)
 
 
+--Listar assentos executivos e econômico disponíveis
+getLinesAssentos :: Handle -> IO [String]
+getLinesAssentos h = hGetContents h >>= return . lines
 
-{- Listar assentos executivos e econômico disponíveis
-listaTodosAssentosDisponiveis:: (IO() -> IO)
+
+listaTodosAssentosDisponiveis:: (IO()) -> IO()
 listaTodosAssentosDisponiveis menu = do
                 arquivo <- openFile "arquivos/assentos.txt" ReadMode
-                linhasAssentos <- getLines arquivo
+                linhasAssentos <- getLinesAssentos arquivo
                 let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
                 putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: ")
-                print(listaDeAssentos)-}
+                print(listaDeAssentos)
