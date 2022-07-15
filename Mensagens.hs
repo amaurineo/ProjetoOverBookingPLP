@@ -16,6 +16,23 @@ mensagemSaida =
     putStr("\nAté mais!\n")
 
 
+menuFuncionario :: IO()
+menuFuncionario = do
+    putStrLn"\n       -----FUNCIONÁRIO-----"
+    putStrLn"\nOlá, funcionário!"
+    putStrLn"\nComo deseja prosseguir?"
+    putStrLn"[0] Exibir descontos disponíveis"
+    putStrLn"[1] Exibir lista de assentos disponíveis"
+    putStrLn"[2] Escolher assento para um cliente"
+    putStrLn"[3] Exibir clientes cadastrados"
+    putStrLn"[4] Excluir cliente do sistema"
+    putStrLn"[5] Cadastrar cliente no sistema"
+    putStrLn"[6] Alterar dado do cliente"
+    putStrLn"[7] Recomendar assento"
+    putStrLn"[8] Voltar ao menu principal"
+    putStrLn"[9] Exibir assentos indisponíveis"
+    putStrLn"[10] Exibir valores para cada tipo de assento"
+    putStrLn"[11] Alterar assento de um cliente\n"
 menuEmpresa :: IO()
 menuEmpresa = do
     putStrLn("\n       -----Menu da Empresa-----")
@@ -83,9 +100,25 @@ descontoExcluido :: IO()
 descontoExcluido = do
     putStr("\nAssento EXCLUIDO COM SUCESSO!")
 
+listaDescontos :: IO()
+listaDescontos = do
+    putStrLn"-----DESCONTOS DISPONÍVEIS-----\n"
+    arq <- openFile "arquivos/descontos.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
+
+exibirListaDescontos :: IO()
+exibirListaDescontos = do
+    putStrLn "DESCONTOS DISPONÍVEIS:\n"
+    arq <- openFile "arquivos/descontos.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
+
 getCpf :: IO()
 getCpf = do
-    putStr"Insira seu CPF: "
+    putStrLn"Insira seu CPF: "
 
 opcaoInvalida :: IO ()
 opcaoInvalida =
@@ -96,6 +129,35 @@ usuarioInvalido = do
     putStrLn"\nErro: usuário não cadastrado no sistema.\n"
 
 
+    putStr("O valor a ser pago em REAIS pelo cliente " ++ Util.getNome cpf lista2 ++ " é: ")
+
+
+clienteExcluido :: IO()
+clienteExcluido = do
+    putStr("\nCLIENTE EXCLUIDO COM SUCESSO!")
+
+
+informeCpf :: IO()
+informeCpf = do
+    putStrLn("Informe o CPF: ")
+
+informeIdade :: IO()
+informeIdade = do
+    putStrLn("Informe sua Idade: ")
+
+
+usuarioCadastrado :: IO()
+usuarioCadastrado = do
+    putStrLn("Erro: usuário já cadastrado!")
+
+
+clienteAlterado :: IO()
+clienteAlterado = do
+    putStr("\nCLIENTE alterado COM SUCESSO!") 
+
+assentoInvalido :: IO()
+assentoInvalido = do
+    putStr("\nASSENTO INDISPONÍVEL\n")
 usuarioNaoCadastrado :: IO()
 usuarioNaoCadastrado =
     putStrLn("\nErro: usuário não cadastrado!\n")
