@@ -27,19 +27,38 @@ menuFuncionario = do
     putStrLn"\n       -----FUNCIONÁRIO-----"
     putStrLn"\nOlá, funcionário!"
     putStrLn"\nComo deseja prosseguir?"
+    putStrLn"[0] Exibir descontos disponíveis"
     putStrLn"[1] Exibir lista de assentos disponíveis"
     putStrLn"[2] Escolher assento para um cliente"
     putStrLn"[3] Exibir clientes cadastrados"
     putStrLn"[4] Excluir cliente do sistema"
     putStrLn"[5] Calcular valor do assento"
     putStrLn"[6] Cadastrar cliente no sistema"
-    putStrLn"[7] Voltar ao menu principal\n"
+    putStrLn"[7] Alterar dado do cliente"
+    putStrLn"[8] Recomendar assento"
+    putStrLn"[9] Voltar ao menu principal\n"
 
 
 exibirListaClientesCadastrados :: IO()
 exibirListaClientesCadastrados = do
     putStrLn"-----CLIENTES CADASTRADOS-----\n"
     arq <- openFile "arquivos/clientes.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
+
+listaDescontos :: IO()
+listaDescontos = do
+    putStrLn"-----DESCONTOS DISPONÍVEIS-----\n"
+    arq <- openFile "arquivos/descontos.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
+
+exibirListaDescontos :: IO()
+exibirListaDescontos = do
+    putStrLn "DESCONTOS DISPONÍVEIS:\n"
+    arq <- openFile "arquivos/descontos.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
     hClose arq
@@ -88,3 +107,12 @@ usuarioCadastrado = do
 cadastroEfetuado :: IO()
 cadastroEfetuado = do
     putStr("\nCADASTRADO EFETUADO COM SUCESSO!")
+
+
+clienteAlterado :: IO()
+clienteAlterado = do
+    putStr("\nCLIENTE alterado COM SUCESSO!") 
+
+assentoInvalido :: IO()
+assentoInvalido = do
+    putStr("\nASSENTO INDISPONÍVEL\n")

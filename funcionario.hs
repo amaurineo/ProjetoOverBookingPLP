@@ -3,6 +3,8 @@ import Util
 import Mensagens
 import Data.List
 import System.IO
+import Control.DeepSeq
+import Control.Exception
 
 -- Recebe cpf do funcionário
 cpfFuncionario :: IO()
@@ -30,7 +32,9 @@ logaFuncionario menu = do
 
     putStrLn"Opção: "
     op <- Util.lerEntradaString
-    if op == "1"
+    if op == "0"
+        then do {Mensagens.listaDescontos;logaFuncionario menu}
+    else if op == "1"
         then do {listaTodosAssentosDisponiveis menu; logaFuncionario menu}
     else if op == "2"
         then do {Funcionario.escolheAssento; logaFuncionario menu}
@@ -43,6 +47,10 @@ logaFuncionario menu = do
     else if op == "6"
         then do {Funcionario.cadastrarCliente menu; logaFuncionario menu}
     else if op == "7"
+        then do {alteraDadoCliente menu;logaFuncionario menu}
+    else if op == "8"
+        then do {recomendaAssento menu; logaFuncionario menu}
+    else if op == "9"
         then do menu
     else do
         {Mensagens.opcaoInvalida; logaFuncionario menu}
@@ -243,3 +251,51 @@ listaTodosAssentosDisponiveis menu = do
                 let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
                 putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: ")
                 print(listaDeAssentos)
+
+recomendaAssento :: (IO()) -> IO()
+recomendaAssento menu = do
+
+    arquivo <- readFile "arquivos/assentos_disponiveis.txt"
+
+    let lista = (lines arquivo)
+    evaluate (force arquivo)
+    let assento = head lista
+
+    putStrLn("Lhe recomendamos esse assento:")
+    print(assento)
+
+
+alteraDadoCliente :: (IO()) -> IO()
+alteraDadoCliente menu = do
+    arquivo <- readFile "arquivos/clientes.txt"
+    --linhasCliente <- getLinesClientes arquivo
+
+    let lista = ((Data.List.map (split(==',') ) (lines arquivo)))
+    evaluate (force arquivo)
+
+
+    putStr("\nAtualmente temos os seguintes clientes no sistema: ")
+    print(lista)
+
+    putStrLn("Informe o CPF do Cliente que deseja alterar: ")
+    cpf <- Util.lerEntradaString
+
+    
+
+    if not (Util.temCadastro cpf lista)
+        then do {Mensagens.usuarioInvalido; excluirCliente menu}     
+    else do 
+        putStrLn("Nova Idade: ")
+        idade <- Util.lerEntradaString
+
+        let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf lista)
+        Util.escreveCliente ""
+    
+        appendFile "arquivos/clientes.txt" (clientesExc)
+        
+        let clienteStr = cpf ++ "," ++ idade ++ "\n"
+        appendFile "arquivos/clientes.txt" (clienteStr)
+        --Mensagens.cadastroEfetuado
+        Mensagens.clienteAlterado
+
+        logaFuncionario menu

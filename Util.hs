@@ -191,3 +191,8 @@ escreverHorarioCpf n = do
 primeiraHorarioCpf :: [[String]] -> String
 primeiraHorarioCpf [] = ""
 primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs
+
+opcaoVaga :: String -> [[String]] -> [[String]]
+opcaoVaga _ [] = []
+opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
+                   | otherwise = x:opcaoVaga v xs
