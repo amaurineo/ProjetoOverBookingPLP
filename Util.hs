@@ -15,10 +15,7 @@ split p s =  case dropWhile p s of
                             where (w, s'') = break p s'
 
 
-temCadastro :: String -> [[String]] -> Bool
-temCadastro _ [] = False
-temCadastro c (x:xs) | not (headCadastrado c x)  = temCadastro c xs
-                   | otherwise = True
+
 
 headCadastrado :: String -> [String] -> Bool
 headCadastrado c (x:xs) = c == x
@@ -122,10 +119,6 @@ opcaoAssento v (x:xs) | (aux v x) == True = opcaoAssento v xs
 ordenarLista :: [String] -> [String]
 ordenarLista listaOriginal = ordena [] listaOriginal
 
-getNome :: String -> [[String]] -> String
-getNome _ [] = ""
-getNome c (x:xs)   | ((headCadastrado c x) == False) = getNome c xs
-                   | otherwise = x !! 1
 
 
 primeira :: [[String]] -> String
@@ -157,7 +150,7 @@ escreverCpv n = do
     hFlush arq
     hClose arq
 
---------------------------------------------------
+------------------------------------------------------------------------
 escreverHorarioCpf :: String -> IO()
 escreverHorarioCpf n = do
 
@@ -212,3 +205,14 @@ escreveDesconto n = do
     hPutStr arq n
     hFlush arq
     hClose arq
+
+temCadastro :: String -> [[String]] -> Bool
+temCadastro _ [] = False
+temCadastro c (x:xs) | not (headCadastrado c x)  = temCadastro c xs
+                   | otherwise = True
+
+
+getNome :: String -> [[String]] -> String
+getNome _ [] = ""
+getNome c (x:xs)   | ((headCadastrado c x) == False) = getNome c xs
+                   | otherwise = x !! 1

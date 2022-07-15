@@ -24,26 +24,18 @@ menuEmpresa menu = do
                     then do listaTodosFuncionarios menu
                 else if funcionalidade == "5"
                     then do listaTodosAssentosDisponiveis menu
-                {-else if funcionalidade == "6"
-                    then do {} -}
-                else if funcionalidade == "7"
+                else if funcionalidade == "6"
                     then do cadastroDeAssentos menu
-                else if funcionalidade == "8"
-                    then do alteraAssento menu
-                else if funcionalidade == "9"
+                else if funcionalidade == "7"
                     then do excluirAssentos menu
-                else if funcionalidade == "10"
+                else if funcionalidade == "8"
                   then do valoresDeCadaTipoo menu
-                else if funcionalidade == "11"
+                else if funcionalidade == "9"
                   then do cadastroDeDescontos menu
-               {-} else if funcionalidade == "12"
-                  then do {} -}
-                else if funcionalidade == "13"
+               else if funcionalidade == "10"
+                  then do alteraDesconto menu
+                else if funcionalidade == "11"
                   then do excluirDesconto menu
-                {-else if funcionalidade == "14"
-                  then do {}
-                else if funcionalidade == "15"
-                  then do menu-}
                 else do
                   {putStrLn("\nError: OPÇÃO INVÁLIDA\n"); Empresa.menuEmpresa menu}
 
@@ -82,7 +74,7 @@ alteraDadoFuncionario menu = do
     print(lista)
 
     if not (Util.temCadastro cpf lista)
-        then do {Mensagens.usuarioInvalido; excluirFuncionario menu}     
+        then do {Mensagens.usuarioInvalido; alteraDadoFuncionario menu}     
     else do 
         putStrLn("Novo nome: ")
         nome <- Util.lerEntradaString
@@ -163,63 +155,6 @@ cadastroDeAssentos menu = do
                     appendFile "arquivos/assentos.txt" (assentoString)
                     Mensagens.cadastroEfetuado
 
--- Altera Assento
-alteraAssento :: (IO()) -> IO() 
-alteraAssento menu = do
-    arquivo <- readFile "arquivos/assentos.txt"
-    
-    putStr("Informe o ID do assento que deseja alterar: ")
-    id <- Util.lerEntradaString
-
-    putStr("Informe o novo tipo do assento: ")
-    tipo <- Util.lerEntradaString
-
-    let listaDeAssentos = ((Data.List.map (split(==',') ) (lines arquivo)))
-    evaluate (force arquivo)
-
-    putStr("\nAtualmente temos os seguintes assentos no sistema: ")
-    print(listaDeAssentos)
-
-    if not (Util.temCadastro id listaDeAssentos)
-        then do {Mensagens.usuarioInvalido; excluirFuncionario menu}     
-    else do 
-        putStrLn("Novo id: ")
-        novoId <- Util.lerEntradaString
-
-        let assentoExc = Util.primeiraHorarioCpf (Util.opcaoVaga id listaDeAssentos)
-        Util.escreveAssento ""
-    
-        appendFile "arquivos/assentos.txt" (assentoExc)
-        
-        let assentoStr = novoId ++ "," ++ tipo ++ "\n"
-        appendFile "arquivos/assentos.txt" (assentoStr)
-        putStr("\nAssento alterado com sucesso!\n")
-
-
--- Exclusão de um assento
-getLinesAssent :: Handle -> IO [String]
-getLinesAssent h = hGetContents h >>= return . lines
-
-excluirAssentos:: (IO()) -> IO()
-excluirAssentos menu = do
-                arquivo <- openFile "arquivos/assentos.txt" ReadMode
-                linhasAssentos <- getLinesAssent arquivo
-                let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
-                putStr("\nAtualmente temos os seguintes assentos no sistema: ")
-                print(listaDeAssentos)
-
-                putStr("\nInforme o ID da poltrona que deseja excluir: ")
-                id <- Util.lerEntradaString
-
-                if not (Util.temCadastro id listaDeAssentos)
-                    then do {Mensagens.usuarioInvalido; excluirFuncionario menu}
-                else do
-                    let assentos = Util.primeiraHorarioCpf (opcaoVaga id listaDeAssentos)
-                    Util.escreveAssento ""
-
-                    appendFile "arquivos/assentos.txt" (assentos)
-                    Mensagens.assentoExcluido
-
 
 -- Cria descontos para assentos
 cadastroDeDescontos:: (IO()) -> IO()
@@ -240,6 +175,36 @@ cadastroDeDescontos menu = do
                     let descontoString = tipo ++ "," ++ valor ++ "\n"
                     appendFile "arquivos/descontos.txt" (descontoString)
                     Mensagens.cadastroEfetuado
+
+-- Altera Desconto
+alteraDesconto :: (IO()) -> IO() 
+alteraDesconto menu = do
+    arquivo <- readFile "arquivos/descontos.txt"
+    
+    putStr("Informe o tipo do assento: ")
+    tipo <- Util.lerEntradaString
+
+    let listaDeDescontos = ((Data.List.map (split(==',') ) (lines arquivo)))
+    evaluate (force arquivo)
+
+    putStr("\nAtualmente temos os seguintes tipos de descontos no sistema: ")
+    print(listaDeDescontos)
+
+    if not (Util.temCadastro tipo listaDeDescontos)
+        then do {Mensagens.usuarioInvalido; alteraDesconto menu}     
+    else do 
+        putStrLn("Novo desconto: ")
+        novoDesconto <- Util.lerEntradaString
+
+        let assentoExc = Util.primeiraHorarioCpf (Util.opcaoVaga tipo listaDeDescontos)
+        Util.escreveDesconto ""
+    
+        appendFile "arquivos/assentos.txt" (assentoExc)
+        
+        let descontoStr = tipo ++ "," ++ novoDesconto ++ "\n"
+        appendFile "arquivos/assentos.txt" (descontoStr)
+        putStr("\nAssento alterado com sucesso!\n")
+
 
 -- Exclusão de um assento
 getLinesDesconto :: Handle -> IO [String]
