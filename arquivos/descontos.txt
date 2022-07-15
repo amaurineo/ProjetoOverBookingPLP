@@ -1,1 +1,1 @@
-economica,30%
+executivo,30%
