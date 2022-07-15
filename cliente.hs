@@ -14,6 +14,7 @@ import System.IO
       Handle,
       IOMode(ReadMode, WriteMode,ReadWriteMode) )
 
+
 --- O cliente pode acessar pelo login ou se cadastrar ---
 acessoCliente :: (IO()) -> IO()
 acessoCliente menu = do
@@ -66,9 +67,11 @@ loginCliente menu = do
         then do {listaTodosAssentosDisponiveis menu; loginCliente menu} --- exibir assentos disponiveis
     else if op == "4"
         then do {realizarCompra menu; loginCliente menu}
-    else if op == "5"
+    else if op == "7"
         then do {renovaAssentos menu; loginCliente menu}
-    else if op == "6"
+    else if op == "8"
+        then do {recomendaAssento menu; loginCliente menu} --- recomendar assentos
+    else if op == "5"
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginCliente menu}
@@ -196,12 +199,14 @@ alteraDadoCliente menu = do
     arquivo <- readFile "arquivos/clientes.txt"
     --linhasCliente <- getLinesClientes arquivo
 
-    putStr("Informe o CPF do Cliente que deseja excluir: ")
+    putStr("Informe o CPF do Cliente que deseja alterar: ")
     cpf <- Util.lerEntradaString
 
     let lista = ((Data.List.map (split(==',') ) (lines arquivo)))
+    evaluate (force arquivo)
 
-    putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
+
+    putStr("\nAtualmente temos os seguintes clientes no sistema: ")
     print(lista)
 
     if not (Util.temCadastro cpf lista)
@@ -211,14 +216,9 @@ alteraDadoCliente menu = do
         idade <- Util.lerEntradaString
 
         let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf lista)
-        --Util.escreveCliente ""
-        --hPutStr arquivo ""
-        
-
-        ---appendFile "arquivos/clientes.txt" (clientesExc)
-        Mensagens.clienteExcluido
-        putStrLn("Até aqui não quebrou")
-        
+        Util.escreveCliente ""
+    
+        appendFile "arquivos/clientes.txt" (clientesExc)
         
         let clienteStr = cpf ++ "," ++ idade ++ "\n"
         appendFile "arquivos/clientes.txt" (clienteStr)
@@ -227,6 +227,7 @@ alteraDadoCliente menu = do
 
         loginCliente menu
 
+    
 -- #
 getLinesClientes :: Handle -> IO [String]
 getLinesClientes h = hGetContents h >>= return . lines
@@ -253,6 +254,19 @@ excluirCliente menu = do
                     
                     appendFile "arquivos/clientes.txt" (clientesExc)
                     Mensagens.clienteExcluido
+
+
+recomendaAssento :: (IO()) -> IO()
+recomendaAssento menu = do
+
+    arquivo <- readFile "arquivos/assentos_disponiveis.txt"
+
+    let lista = (lines arquivo)
+    evaluate (force arquivo)
+    let assento = head lista
+
+    putStrLn("Lhe recomendamos esse assento:")
+    print(assento)
 
 
 --Listar assentos executivos e econômico disponíveis
