@@ -196,3 +196,36 @@ opcaoVaga :: String -> [[String]] -> [[String]]
 opcaoVaga _ [] = []
 opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
                    | otherwise = x:opcaoVaga v xs
+
+temAssento :: String -> [[String]] -> Bool
+temAssento _ [] = False
+temAssento c (x:xs) | not (headAssentoDisponivel c x) = temAssento c xs
+                    | otherwise = True
+
+headAssentoDisponivel :: String -> [String] -> Bool
+headAssentoDisponivel _ [] = False
+headAssentoDisponivel c (x:xs) = c == x
+
+primeiroAssento :: [[String]] -> String
+primeiroAssento [] = ""
+primeiroAssento (x:xs) = head x ++ "\n" ++ primeiroAssento xs
+
+primeiroAssento1 :: [String] -> String
+primeiroAssento1 [] = ""
+primeiroAssento1 (x:xs) = x ++ "\n" ++ primeiroAssento1 xs 
+
+escreveAssento1 :: String -> IO()
+escreveAssento1 n = do
+
+    arq <- openFile "arquivos/assentos_executivo_disponivel.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreveAssento2 :: String -> IO()
+escreveAssento2 n = do
+
+    arq <- openFile "arquivos/assentos_economico_disponivel.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
