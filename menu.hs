@@ -13,7 +13,7 @@ main = do
 escolheOpcao :: String -> IO()
 escolheOpcao opcao | opcao == "1" = putStr"Area do cliente"
 				   | opcao == "2" = Funcionario.verificaFuncionario main
-				   | opcao == "3" = putStr("Area da empresa")
+				   | opcao == "3" = Empresa.menuEmpresa  main
 				   | opcao == "4" = Mensagens.mensagemSaida
                    | otherwise = do {Mensagens.opcaoInvalida; main}
 
