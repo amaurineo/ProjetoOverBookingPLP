@@ -1,7 +1,7 @@
 module Util where
 import System.IO
 import Data.List
-  
+
 
 lerEntradaString :: IO String
 lerEntradaString = do
@@ -70,38 +70,41 @@ parseToInt2 s = read (s) :: Int
 escolheAssento :: String  -> IO()
 escolheAssento cpf = do
 
+
     arq <- readFile "arquivos/assentos.txt"
+    -- ok até aqui
+    --
     let lista = ((Data.List.map (split(==',') ) (lines arq)))
-    
+    -- ok até aqui
+
     if lista == []
         then do print ("Não há vagas")
     else
         do
-    
-    print (ordenarLista (parseDicToList (lista)))
-    putStr"\nQual assento você deseja? "
+            print (parseDicToList lista) --ERRO AQUI
+            putStrLn"\nQual assento você deseja? "
 
-    assento <- lerEntradaString
-    let lista2 = opcaoAssento assento lista
+            assento <- lerEntradaString
+            let lista2 = opcaoAssento assento lista
 
-    putStr"\nDeseja realizar upgrade para a classe executiva? [S/N] "
-    servicoextra <- Util.lerEntradaString
-
+            putStrLn"\nDeseja realizar upgrade para a classe executiva? [S/N] "
+            servicoextra <- Util.lerEntradaString
 
 
-    let n = primeira (lista2)
-    escreveAssento (primeira (lista2))
 
-    let cpvStr = cpf ++ "," ++ "," ++ assento ++ "\n"
-    appendFile "arquivos/cpf-assento.txt" (cpvStr)
+            let n = primeira (lista2)
+            escreveAssento (primeira (lista2))
+
+            let cpvStr = cpf ++ "," ++ assento ++ "\n"
+            appendFile "arquivos/cpf-assento.txt" (cpvStr)
 
 
-    let cpvh = cpf ++ "," ++ "," ++ assento ++ ","  ++ "," ++ servicoextra ++ "\n"
+            let cpvh = cpf ++ "," ++ "," ++ assento ++ ","  ++ "," ++ servicoextra ++ "\n"
 
-    appendFile "arquivos/horario-cpf.txt"  (cpvh)
+            appendFile "arquivos/horario-cpf.txt"  (cpvh)
 
-    let cpfUltimaVaga = cpf ++ "," ++ assento ++ "\n"
-    appendFile "arquivos/recomendarAssentos.txt" (cpfUltimaVaga)
+            let cpfUltimaVaga = cpf ++ "," ++ assento ++ "\n"
+            appendFile "arquivos/recomendarAssentos.txt" (cpfUltimaVaga)
 
 escreveCliente :: String -> IO()
 escreveCliente n = do
@@ -110,10 +113,9 @@ escreveCliente n = do
     hPutStr arq n
     hFlush arq
     hClose arq
-
 cadastraCliente :: IO()
 cadastraCliente = do
-    n <- lerEntradaString 
+    n <- lerEntradaString
     contents <- readFile "arquivos/clientes.txt"
     let newContents = n ++ "," ++ contents
     print newContents
@@ -184,3 +186,8 @@ escreverHorarioCpf n = do
     hPutStr arq n
     hFlush arq
     hClose arq
+
+
+primeiraHorarioCpf :: [[String]] -> String
+primeiraHorarioCpf [] = ""
+primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs

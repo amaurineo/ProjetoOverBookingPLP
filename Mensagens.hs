@@ -46,7 +46,7 @@ exibirListaClientesCadastrados = do
 
 getCpf :: IO()
 getCpf = do
-    putStr"Insira seu CPF: "
+    putStrLn"Insira seu CPF: "
 
 
 usuarioAssentoOcupado :: IO()
@@ -61,3 +61,30 @@ valorPago :: String -> [[String]] -> IO()
 valorPago cpf lista2 = do
 
     putStr("O valor a ser pago em REAIS pelo cliente " ++ Util.getNome cpf lista2 ++ " é: ")
+
+
+clienteExcluido :: IO()
+clienteExcluido = do
+    putStr("\nCLIENTE EXCLUIDO COM SUCESSO!")
+
+cadastrarNome :: IO()
+cadastrarNome = do
+    putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
+    putStrLn("\nInforme o nome: ") 
+
+informeCpf :: IO()
+informeCpf = do
+    putStrLn("Informe o CPF: ")
+
+informeIdade :: IO()
+informeIdade = do
+    putStrLn("Informe sua Idade: ")
+
+
+usuarioCadastrado :: IO()
+usuarioCadastrado = do
+    putStrLn("Erro: usuário já cadastrado!")
+
+cadastroEfetuado :: IO()
+cadastroEfetuado = do
+    putStr("\nCADASTRADO EFETUADO COM SUCESSO!")

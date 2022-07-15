@@ -7,7 +7,7 @@ import System.IO
 -- Recebe cpf do funcionário
 cpfFuncionario :: IO()
 cpfFuncionario = do
-    putStr "\nInforme seu CPF para fazer o login: "
+    putStrLn "\nInforme seu CPF para fazer o login: "
 
 -- Verifica se o cpf está cadastrado no sistema
 verificaFuncionario :: (IO()) -> IO()
@@ -28,7 +28,7 @@ logaFuncionario :: IO() -> IO()
 logaFuncionario menu = do
     Mensagens.menuFuncionario
 
-    putStr"Opção: "
+    putStrLn"Opção: "
     op <- Util.lerEntradaString
     if op == "1"
         then do {Util.exibirAssentos; logaFuncionario menu}
@@ -37,11 +37,11 @@ logaFuncionario menu = do
     else if op == "3"
         then do {Mensagens.exibirListaClientesCadastrados; logaFuncionario menu}
     else if op == "4"
-        then do {excluirCliente menu; logaFuncionario menu}
+        then do {excluirCliente2 menu; logaFuncionario menu}
     else if op == "5"
         then do {calcularValorPassagem menu}
     else if op == "6"
-        then do {Util.cadastraCliente; logaFuncionario menu}
+        then do {Funcionario.cadastrarCliente menu; logaFuncionario menu}
     else if op == "7"
         then do menu
     else do
@@ -49,7 +49,7 @@ logaFuncionario menu = do
 
 escolheAssento :: IO()
 escolheAssento = do
-    putStr"\nSerá necessário realizar o cadastro ou log in no sistema!\n"
+    putStrLn"\nSerá necessário realizar o cadastro ou log in no sistema!\n"
     Mensagens.getCpf
     cpf <- Util.lerEntradaString
 
@@ -63,13 +63,13 @@ escolheAssento = do
         then do Mensagens.usuarioAssentoOcupado
     else if Util.temCadastro cpf lista2
         then do
-            putStr"\nVocê já está cadastrado, pode continuar.\n"
+            putStrLn"\nVocê já está cadastrado, pode continuar.\n"
 
             putStr"\n"
             Util.escolheAssento cpf
             putStr""
     else do
-        putStr"Informe o nome: "
+        putStrLn"Informe o nome: "
         nome <- Util.lerEntradaString
 
         let clienteStr = cpf ++ "," ++ nome ++ "," ++ "\n"
@@ -85,7 +85,7 @@ getlines h = hGetContents h >>= return . lines
 -- exclusão do cliente
 excluirCliente :: IO() -> IO()
 excluirCliente menu = do
-    putStr"Informe o CPF do cliente que deseja excluir: "
+    putStrLn"Informe o CPF do cliente que deseja excluir: "
     cpf <- Util.lerEntradaString
 
     arq <- openFile "arquivos/clientes.txt" ReadMode
@@ -165,10 +165,6 @@ toInt s = read (s) :: Int
 dizHoraInt:: [[String]] -> Int
 dizHoraInt lista = read (lista !! 0 !! 3) :: Int
 
-horaDeSaida :: IO()
-horaDeSaida = do
-    putStr("Hora de saída: ")
-
 
 horaCpf :: String -> [[String]] -> [[String]]
 horaCpf _ [] = []
@@ -181,3 +177,57 @@ extraInt (x:xs) | (x !! 4) == "s" = 15
 
 auxHoraCpf :: String -> [String] -> Bool
 auxHoraCpf v (x:xs) = (v == x)
+
+
+getLinesClientes :: Handle -> IO [String]
+getLinesClientes h = hGetContents h >>= return . lines
+
+
+excluirCliente2 :: (IO()) -> IO()
+excluirCliente2 menu = do
+    arquivo <- openFile "arquivos/clientes.txt" ReadMode 
+    linhasCli <- getLinesClientes arquivo
+    --let listaDeCliente = ((Data.List.map (splitLacerda(==","))linhas))
+    let listaDeCliente = ((Data.List.map (split(==',') ) linhasCli))
+    putStr"\nAtualmente temos os seguintes clientes cadastrados:"
+    print(listaDeCliente)
+
+    putStrLn"Informe o CPF do cliente que deseja excluir:"
+    cpf <- Util.lerEntradaString 
+    print(cpf)
+    if not (Util.temCadastro cpf listaDeCliente)
+        then do {Mensagens.usuarioInvalido; excluirCliente2 menu}
+    else do
+        let clientes = Util.primeiraHorarioCpf (Util.opcaoAssento cpf listaDeCliente)
+        Util.escreveCliente ""
+        appendFile "arquivos/clientes.txt" (clientes)
+        Mensagens.clienteExcluido
+
+
+splitLacerda     :: (Char -> Bool) -> String -> [String]
+splitLacerda p s =  case dropWhile p s of
+                      "" -> []
+                      s' -> w : split p s''
+                            where (w, s'') = break p s'
+
+cadastrarCliente :: (IO()) -> IO()
+cadastrarCliente menu = do
+    Mensagens.cadastrarNome
+    nome <- Util.lerEntradaString
+
+    Mensagens.informeCpf
+    cpf <- Util.lerEntradaString
+
+    Mensagens.informeIdade
+    idade <-Util.lerEntradaString
+
+    arq <- readFile "arquivos/clientes.txt"
+    let lista = ((Data.List.map (Util.split(==',') ) (lines arq)))
+
+    if Util.temCadastro cpf lista
+       then do {Mensagens.usuarioCadastrado; logaFuncionario menu}
+    else do
+        let clienteStr = cpf ++ "," ++ idade ++ "\n"
+        appendFile "arquivos/clientes.txt" (clienteStr)
+        Mensagens.cadastroEfetuado
+        logaFuncionario menu
