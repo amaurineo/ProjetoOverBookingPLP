@@ -1,6 +1,7 @@
 import Mensagens
 import Util
-import Funcionario
+--import Funcionario
+import Empresa
 
 main :: IO ()
 main = do
@@ -12,8 +13,8 @@ main = do
 
 escolheOpcao :: String -> IO()
 escolheOpcao opcao | opcao == "1" = putStr"Area do cliente"
-				   | opcao == "2" = Funcionario.verificaFuncionario main
-				   | opcao == "3" = putStr("Area da empresa")
+--				   | opcao == "2" = Funcionario.verificaFuncionario main
+				   | opcao == "3" = Empresa.menuEmpresa  main
 				   | opcao == "4" = Mensagens.mensagemSaida
                    | otherwise = do {Mensagens.opcaoInvalida; main}
 

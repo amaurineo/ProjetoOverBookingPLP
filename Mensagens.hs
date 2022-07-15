@@ -10,53 +10,92 @@ menuPrincipal = do
     putStr"\n[3] Area da empresa"
     putStr"\n[4] Sair\n"
 
-opcaoInvalida :: IO ()
-opcaoInvalida =
-    putStr("\nERRO: Escolha uma opcao valida\n\n")
 
 mensagemSaida :: IO ()
 mensagemSaida =
     putStr("\nAté mais!\n")
 
-usuarioNaoCadastrado :: IO()
-usuarioNaoCadastrado =
-    putStrLn("\nErro: usuário não cadastrado!\n")
 
-menuFuncionario :: IO()
-menuFuncionario = do
-    putStrLn"\n       -----FUNCIONÁRIO-----"
-    putStrLn"\nOlá, funcionário!"
-    putStrLn"\nComo deseja prosseguir?"
-    putStrLn"[1] Exibir lista de assentos disponíveis"
-    putStrLn"[2] Escolher assento para um cliente"
-    putStrLn"[3] Exibir clientes cadastrados"
-    putStrLn"[4] Excluir cliente do sistema"
-    putStrLn"[5] Calcular valor do assento"
-    putStrLn"[6] Voltar ao menu principal\n"
+menuEmpresa :: IO()
+menuEmpresa = do
+    putStrLn("\n       -----Menu da Empresa-----")
+
+    putStrLn("\nComo deseja prosseguir?")
+    putStrLn("[1] Cadastrar funcionário")
+    putStrLn("[2] Alterar funcionário")
+    putStrLn("[3] Excluir funcionário")
+    putStrLn("[4] Visualizar funcionários ativos")
+    putStrLn("[5] Listar assentos executivos e econômicos disponíveis")
+    putStrLn("[6] Listar valores para cada tipo de assento")
+    putStrLn("[7] Criar descontos")
+    putStrLn("[8] Alterar descontos")
+    putStrLn("[9] Excluir descontos")
+    putStrLn("[10] Voltar ao menu principal\n")
+
+cadastroEfetuado :: IO()
+cadastroEfetuado = do
+    putStr("\nCADASTRADO EFETUADO COM SUCESSO!")
+
+cadastrarNome :: IO()
+cadastrarNome = do
+    putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
+    putStr("\nInforme o nome: ")
+
+cadastrarIdAssento :: IO()
+cadastrarIdAssento = do
+    putStrLn("\n       -----CADASTRO DE ASSENTO-----")
+    putStr("\nInforme o ID poltrona: ")
+
+getTipo :: IO()
+getTipo = do
+    putStr"Insira o tipo da poltrona: "
+
+cadastrarDesconto :: IO()
+cadastrarDesconto = do
+    putStrLn("\n       -----CADASTRO DE Desconto-----")
+    putStr("Insira tipo da poltrona: ")
+
+    
+
+funcionarioExcluido :: IO()
+funcionarioExcluido = do
+    putStr("\nFUNCIONÁRIO EXCLUIDO COM SUCESSO!")
+
+assentoExcluido :: IO()
+assentoExcluido = do
+    putStr("\nAssento EXCLUIDO COM SUCESSO!")
 
 
-exibirListaClientesCadastrados :: IO()
-exibirListaClientesCadastrados = do
-    putStrLn"-----CLIENTES CADASTRADOS-----\n"
-    arq <- openFile "arquivos/clientes.txt" ReadMode
-    conteudo <- hGetContents arq
-    putStrLn conteudo
-    hClose arq
+getValorDoDesconto :: IO()
+getValorDoDesconto = do
+    putStr("Insira o valor do desconto: ")
+
+tipoJaCadastrado:: IO()
+tipoJaCadastrado =
+    putStrLn("\nErro: tipo já cadastrado!\n")
+
+assentoJaCadastrado:: IO()
+assentoJaCadastrado =
+    putStrLn("\nErro: tipo já cadastrado!\n")
+
+
+descontoExcluido :: IO()
+descontoExcluido = do
+    putStr("\nAssento EXCLUIDO COM SUCESSO!")
 
 getCpf :: IO()
 getCpf = do
     putStr"Insira seu CPF: "
 
-
-usuarioAssentoOcupado :: IO()
-usuarioAssentoOcupado = do
-    putStrLn"\nErro: usuário já está ocupando um assento."
+opcaoInvalida :: IO ()
+opcaoInvalida =
+    putStr("\nERRO: Escolha uma opcao valida\n\n")
 
 usuarioInvalido :: IO()
 usuarioInvalido = do
     putStrLn"\nErro: usuário não cadastrado no sistema.\n"
 
-valorPago :: String -> [[String]] -> IO()
-valorPago cpf lista2 = do
 
-    putStr("O valor a ser pago em REAIS pelo cliente " ++ Util.getNome cpf lista2 ++ " é: ")
+usuarioNaoCadastrado :: IO()
+usuarioNaoCadastrado =
+    putStrLn("\nErro: usuário não cadastrado!\n")
