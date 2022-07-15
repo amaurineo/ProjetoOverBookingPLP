@@ -90,12 +90,12 @@ escolheAssento = do
         Util.escolheAssento cpf
     putStr""
 
---TALVEZ isso cause um erro
-getlines :: Handle -> IO [String]
+--TALVEZ isso cause um erro (não causa)
+getlines :: Handle -> IO [String] --É UTILIZADO
 getlines h = hGetContents h >>= return . lines
 
 -- exclusão do cliente
-excluirCliente :: IO() -> IO()
+excluirCliente :: IO() -> IO() --É UTILIZADO
 excluirCliente menu = do
     putStrLn"Informe o CPF do cliente que deseja excluir: "
     cpf <- Util.lerEntradaString
@@ -122,7 +122,6 @@ excluirCliente menu = do
 aux :: String -> [String] -> Bool
 aux v (x:xs) = v == x
 
-
 primeiraCpv :: [[String]] -> String
 primeiraCpv [] = ""
 primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "," ++ (x !! 3) ++ "," ++ (x !! 4) ++ "\n" ++ primeiraCpv xs
@@ -132,22 +131,6 @@ valorFinalEst saida entrada extra getValor =  (((toInt saida) - entrada) * getVa
 
 toInt :: String -> Int
 toInt s = read (s) :: Int
-
-dizHoraInt:: [[String]] -> Int
-dizHoraInt lista = read (lista !! 0 !! 3) :: Int
-
-
-horaCpf :: String -> [[String]] -> [[String]]
-horaCpf _ [] = []
-horaCpf v (x:xs) | (auxHoraCpf v x) == False = horaCpf v xs
-                   | otherwise = x:horaCpf v xs
-
-extraInt :: [[String]] -> Int
-extraInt (x:xs) | (x !! 4) == "s" = 15
-                | otherwise = 0
-
-auxHoraCpf :: String -> [String] -> Bool
-auxHoraCpf v (x:xs) = (v == x)
 
 
 getLinesClientes :: Handle -> IO [String]
@@ -174,12 +157,6 @@ excluirCliente2 menu = do
         appendFile "arquivos/clientes.txt" (clientes)
         Mensagens.clienteExcluido
 
-
-splitLacerda     :: (Char -> Bool) -> String -> [String]
-splitLacerda p s =  case dropWhile p s of
-                      "" -> []
-                      s' -> w : split p s''
-                            where (w, s'') = break p s'
 
 cadastrarCliente :: (IO()) -> IO()
 cadastrarCliente menu = do
