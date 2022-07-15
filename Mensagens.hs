@@ -32,14 +32,13 @@ menuFuncionario = do
     putStrLn"[2] Escolher assento para um cliente"
     putStrLn"[3] Exibir clientes cadastrados"
     putStrLn"[4] Excluir cliente do sistema"
-    putStrLn"[5] Calcular valor do assento"
-    putStrLn"[6] Cadastrar cliente no sistema"
-    putStrLn"[7] Alterar dado do cliente"
-    putStrLn"[8] Recomendar assento"
-    putStrLn"[9] Voltar ao menu principal"
-    putStrLn"[10] Exibir assentos indisponíveis"
-    putStrLn"[11] Exibir valores para cada tipo de assento"
-    putStrLn"[12] Alterar assento de um cliente\n"
+    putStrLn"[5] Cadastrar cliente no sistema"
+    putStrLn"[6] Alterar dado do cliente"
+    putStrLn"[7] Recomendar assento"
+    putStrLn"[8] Voltar ao menu principal"
+    putStrLn"[9] Exibir assentos indisponíveis"
+    putStrLn"[10] Exibir valores para cada tipo de assento"
+    putStrLn"[11] Alterar assento de um cliente\n"
 
 
 exibirListaClientesCadastrados :: IO()

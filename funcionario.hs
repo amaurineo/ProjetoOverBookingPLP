@@ -43,20 +43,18 @@ logaFuncionario menu = do
     else if op == "4"
         then do {excluirCliente2 menu; logaFuncionario menu}
     else if op == "5"
-        then do {calcularValorPassagem menu}
-    else if op == "6"
         then do {Funcionario.cadastrarCliente menu; logaFuncionario menu}
-    else if op == "7"
+    else if op == "6"
         then do {alteraDadoCliente menu;logaFuncionario menu}
-    else if op == "8"
+    else if op == "7"
         then do {recomendaAssento menu; logaFuncionario menu}
-    else if op == "9"
+    else if op == "8"
         then do menu
-    else if op == "10"
+    else if op == "9"
         then do {listaTodosAssentosIndisponiveis menu; logaFuncionario menu}
-    else if op == "11"
+    else if op == "10"
         then do {listaValores menu; logaFuncionario menu}
-    else if op == "12"
+    else if op == "11"
         then do {alteraAssento menu; logaFuncionario menu}
     else do
         {Mensagens.opcaoInvalida; logaFuncionario menu}
