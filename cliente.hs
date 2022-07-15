@@ -66,12 +66,12 @@ loginCliente menu = do
     else if op == "3"
         then do {listaTodosAssentosDisponiveis menu; loginCliente menu} --- exibir assentos disponiveis
     else if op == "4"
-        then do {realizarCompra menu; loginCliente menu}
-    else if op == "7"
-        then do {renovaAssentos menu; loginCliente menu}
-    else if op == "8"
         then do {recomendaAssento menu; loginCliente menu} --- recomendar assentos
     else if op == "5"
+        then do {realizarCompra menu; loginCliente menu} --- realiza compra
+    else if op == "6"
+        then do {cancelaCompras menu; loginCliente menu} --- cancela compras
+    else if op == "7"
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginCliente menu}
@@ -102,19 +102,14 @@ realizarCompra menu = do
     arquivo2 <- readFile "arquivos/assentos.txt"
     let listaDeTodosAssentos = ((Data.List.map (wordsWhen(==',') ) (lines arquivo2)))
 
-    arquivo4 <- readFile "arquivos/assentos_economico.txt"
-    let listaDeAssentosEconomico = (lines arquivo4)
-
     arquivo5 <- readFile "arquivos/assentos_executivo_disponivel.txt"
     let listaDeAssentosExecutivoDisponivel =  (Data.List.map (wordsWhen(==',') )(lines arquivo5))
 
     arquivo6 <- readFile "arquivos/assentos_economico_disponivel.txt"
     let listaDeAssentosEconomicoDisponivel =  (Data.List.map (wordsWhen(==',') )(lines arquivo6))
 
-
     evaluate (force arquivo1)
     evaluate (force arquivo2)
-    evaluate (force arquivo4)
     evaluate (force arquivo5)
     evaluate (force arquivo6)
 
@@ -187,6 +182,31 @@ renovaAssentos menu = do
     Util.escreveAssento2 ""
     appendFile "arquivos/assentos_executivo_disponivel.txt" (x)
     appendFile "arquivos/assentos_economico_disponivel.txt" (y)
+
+-- #
+getLinesCompra :: Handle -> IO [String]
+getLinesCompra h = hGetContents h >>= return . lines
+
+cancelaCompras :: (IO()) -> IO()
+cancelaCompras menu = do
+    Mensagens.informeCpf
+    cpf <- Util.lerEntradaString
+    arquivo <- readFile "arquivos/compra.txt"
+    let listaDeCompra= ((Data.List.map (wordsWhen(==',') ) (lines arquivo)))
+    evaluate (force arquivo)
+
+    putStr("\nAtualmente temos os seguintes compras no sistema: ")
+    print(listaDeCompra)
+
+    if not (Util.temCadastro cpf listaDeCompra)
+        then do {Mensagens.usuarioInvalido; cancelaCompras menu}     
+    else do 
+        let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf listaDeCompra)
+        Util.escreveCompra ""
+        
+        appendFile "arquivos/compra.txt" (clientesExc)
+        putStrLn("Compras canceladas com sucesso")
+
 
 
 -- alterar cadastro do cliente

@@ -100,11 +100,10 @@ menuCliente = do
     putStrLn"[1] Alterar dados no meu cadastro"
     putStrLn"[2] Deletar meu cadastro no sistema"
     putStrLn"[3] Exibir lista de assentos disponíveis para compra"
-    putStrLn"[4] Realizar compra"
-    putStrLn"[7] Renovar assentos"
-    putStrLn"[6] Voltar ao menu principal\n"
-    putStrLn"[8] Recomendar assento"
-    putStrLn"[5] Voltar ao menu principal\n"
+    putStrLn"[4] Recomendar assento"
+    putStrLn"[5] Realizar compra"
+    putStrLn"[6] Cancela todas as compras"
+    putStrLn"[7] Voltar ao menu principal\n"
 
 menuSelectAssentoCliente :: IO()
 menuSelectAssentoCliente = do

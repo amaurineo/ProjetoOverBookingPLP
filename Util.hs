@@ -114,6 +114,14 @@ escolheAssento cpf = do
     let cpfUltimaVaga = cpf ++ "," ++ assento ++ "\n"
     appendFile "arquivos/recomendarAssentos.txt" (cpfUltimaVaga)
 
+escreveCompra :: String -> IO()
+escreveCompra n = do
+    
+    arq <- openFile "arquivos/compra.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
 escreveCliente :: String -> IO()
 escreveCliente n = do
     

@@ -7,7 +7,6 @@ main :: IO ()
 main = do
 	putStr("\n--------------------Seja bem vinde ao sistema OVERBOOKING!--------------------\n")
 	Mensagens.menuPrincipal
-	
 	opcao <- Util.lerEntradaString
 	escolheOpcao opcao
 
