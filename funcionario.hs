@@ -31,7 +31,7 @@ logaFuncionario menu = do
     putStrLn"Opção: "
     op <- Util.lerEntradaString
     if op == "1"
-        then do {Util.exibirAssentos; logaFuncionario menu}
+        then do {listaTodosAssentosDisponiveis menu; logaFuncionario menu}
     else if op == "2"
         then do {Funcionario.escolheAssento; logaFuncionario menu}
     else if op == "3"
@@ -231,3 +231,15 @@ cadastrarCliente menu = do
         appendFile "arquivos/clientes.txt" (clienteStr)
         Mensagens.cadastroEfetuado
         logaFuncionario menu
+
+
+getLinesAssentos :: Handle -> IO [String]
+getLinesAssentos h = hGetContents h >>= return . lines
+
+listaTodosAssentosDisponiveis:: (IO()) -> IO()
+listaTodosAssentosDisponiveis menu = do
+                arquivo <- openFile "arquivos/assentos.txt" ReadMode
+                linhasAssentos <- getLinesAssentos arquivo
+                let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
+                putStr("\nAtualmente temos os seguintes assentos executivos e econômicos no sistema: ")
+                print(listaDeAssentos)
