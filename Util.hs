@@ -229,3 +229,11 @@ escreveAssento2 n = do
     hPutStr arq n
     hFlush arq
     hClose arq
+
+escreveCompra :: String -> IO()
+escreveCompra n = do
+    
+    arq <- openFile "arquivos/compra.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq

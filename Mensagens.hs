@@ -38,7 +38,8 @@ menuFuncionario = do
     putStrLn"[8] Recomendar assento"
     putStrLn"[9] Voltar ao menu principal"
     putStrLn"[10] Exibir assentos indisponíveis"
-    putStrLn"[11] Exibir valores para cada tipo de assento\n"
+    putStrLn"[11] Exibir valores para cada tipo de assento"
+    putStrLn"[12] Alterar assento de um cliente\n"
 
 
 exibirListaClientesCadastrados :: IO()

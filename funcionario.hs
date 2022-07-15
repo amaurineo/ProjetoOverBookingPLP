@@ -56,6 +56,8 @@ logaFuncionario menu = do
         then do {listaTodosAssentosIndisponiveis menu; logaFuncionario menu}
     else if op == "11"
         then do {listaValores menu; logaFuncionario menu}
+    else if op == "12"
+        then do {alteraAssento menu; logaFuncionario menu}
     else do
         {Mensagens.opcaoInvalida; logaFuncionario menu}
 
@@ -393,6 +395,94 @@ realizarCompra menu = do
                     let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "150" ++ "\n"
                     appendFile "arquivos/compra.txt" (assentoStr)
                     appendFile "arquivos/assentos_indisponiveis.txt" (tipoAssento ++ "\n")
+
+                    let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosEconomicoDisponivel)
+                    Util.escreveAssento2 ""
+                    appendFile "arquivos/assentos_economico_disponivel.txt" (aux)
+
+        else
+            Mensagens.opcaoInvalida
+
+alteraAssento :: (IO()) -> IO()
+alteraAssento menu = do
+    putStrLn("Digite seu cpf para verificarmos seu assento")
+    Mensagens.informeCpf
+    cpf <- Util.lerEntradaString
+    arquivo <- readFile "arquivos/compra.txt"
+    let listaDeCompra= ((Data.List.map (split(==',') ) (lines arquivo)))
+    evaluate (force arquivo)
+
+    putStr("\nAtualmente temos os seguintes compras no sistema: ")
+    print(listaDeCompra)
+
+    if not (Util.temCadastro cpf listaDeCompra)
+        then do {Mensagens.usuarioInvalido; alteraAssento menu}     
+    else do 
+        let clientesExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf listaDeCompra)
+        Util.escreveCompra ""
+        
+        appendFile "arquivos/compra.txt" (clientesExc)
+
+    putStrLn("seu novo assento sera:")
+
+    arquivo <- openFile "arquivos/clientes.txt" ReadMode
+    linhasCliente <- getLinesClientes arquivo
+
+    arquivo1 <- readFile "arquivos/assentos_disponiveis.txt"
+    let listaDeAssentosDisponiveis = ((Data.List.map (split(==',') ) (lines arquivo1)))
+
+    arquivo2 <- readFile "arquivos/assentos.txt"
+    let listaDeTodosAssentos = ((Data.List.map (split(==',') ) (lines arquivo2)))
+
+    arquivo5 <- readFile "arquivos/assentos_executivo_disponivel.txt"
+    let listaDeAssentosExecutivoDisponivel =  (Data.List.map (split(==',') )(lines arquivo5))
+
+    arquivo6 <- readFile "arquivos/assentos_economico_disponivel.txt"
+    let listaDeAssentosEconomicoDisponivel =  (Data.List.map (split(==',') )(lines arquivo6))
+
+    evaluate (force arquivo1)
+    evaluate (force arquivo2)
+    evaluate (force arquivo5)
+    evaluate (force arquivo6)
+
+    let listaDeCliente = ((Data.List.map (split(==',') ) (linhasCliente)))
+
+    if not (Util.temCadastro cpf listaDeCliente)
+        then do {Mensagens.usuarioInvalido; realizarCompra menu}
+    else do
+        putStr("Qual tipo do seu novo assento? [1]Executivo ou [2]Economico\n")
+        tipoClasse <- Util.lerEntradaString
+     
+        if (tipoClasse == "1")
+            then do
+                putStr("Os assentos disponíveis são: ")
+                print(listaDeAssentosExecutivoDisponivel)
+
+                putStr("Qual assento você deseja? ")
+                tipoAssento <- Util.lerEntradaString
+
+                if not (Util.temAssento tipoAssento listaDeAssentosExecutivoDisponivel)
+                    then do {Mensagens.assentoInvalido; alteraAssento menu}
+                else do
+                    let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "125" ++ "\n"
+                    appendFile "arquivos/compra.txt" (assentoStr)
+
+                    let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosExecutivoDisponivel)
+                    Util.escreveAssento1 ""
+                    appendFile "arquivos/assentos_executivo_disponivel.txt" (aux)
+        else if (tipoClasse == "2")
+            then do
+                putStr("Os assentos disponíveis são: ")
+                print(listaDeAssentosEconomicoDisponivel)
+
+                putStr("Qual assento você deseja? ")
+                tipoAssento <- Util.lerEntradaString
+
+                if not (Util.temAssento tipoAssento listaDeAssentosEconomicoDisponivel)
+                    then do {Mensagens.assentoInvalido; alteraAssento menu}
+                else do
+                    let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "50" ++ "\n"
+                    appendFile "arquivos/compra.txt" (assentoStr)
 
                     let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosEconomicoDisponivel)
                     Util.escreveAssento2 ""
