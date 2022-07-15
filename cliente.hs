@@ -101,9 +101,6 @@ realizarCompra menu = do
 
     arquivo2 <- readFile "arquivos/assentos.txt"
     let listaDeTodosAssentos = ((Data.List.map (wordsWhen(==',') ) (lines arquivo2)))
- 
-    arquivo3 <- readFile "arquivos/assentos_indisponiveis.txt"
-    let listaDeAssentosIndisponiveis = Data.List.map (Util.split(==',') ) (lines arquivo3)
 
     arquivo4 <- readFile "arquivos/assentos_economico.txt"
     let listaDeAssentosEconomico = (lines arquivo4)
@@ -117,7 +114,6 @@ realizarCompra menu = do
 
     evaluate (force arquivo1)
     evaluate (force arquivo2)
-    evaluate (force arquivo3)
     evaluate (force arquivo4)
     evaluate (force arquivo5)
     evaluate (force arquivo6)
@@ -148,7 +144,7 @@ realizarCompra menu = do
                     appendFile "arquivos/compra.txt" (assentoStr)
 
                     let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosExecutivoDisponivel)
-                    Util.escreveAssento3 ""
+                    Util.escreveAssento1 ""
                     appendFile "arquivos/assentos_executivo_disponivel.txt" (aux)
         
         else if (tipoClasse == "2")
@@ -166,7 +162,7 @@ realizarCompra menu = do
                     appendFile "arquivos/compra.txt" (assentoStr)
 
                     let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosEconomicoDisponivel)
-                    Util.escreveAssento4 ""
+                    Util.escreveAssento2 ""
                     appendFile "arquivos/assentos_economico_disponivel.txt" (aux)
 
         else

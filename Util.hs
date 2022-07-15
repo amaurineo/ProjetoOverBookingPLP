@@ -168,29 +168,13 @@ escreveAssento n = do
 escreveAssento1 :: String -> IO()
 escreveAssento1 n = do
 
-    arq <- openFile "arquivos/assentos_disponiveis.txt" WriteMode
+    arq <- openFile "arquivos/assentos_executivo_disponivel.txt" WriteMode
     hPutStr arq n
     hFlush arq
     hClose arq
 
 escreveAssento2 :: String -> IO()
 escreveAssento2 n = do
-
-    arq <- openFile "arquivos/assentos_indisponiveis.txt" WriteMode
-    hPutStr arq n
-    hFlush arq
-    hClose arq
-
-escreveAssento3 :: String -> IO()
-escreveAssento3 n = do
-
-    arq <- openFile "arquivos/assentos_executivo_disponivel.txt" WriteMode
-    hPutStr arq n
-    hFlush arq
-    hClose arq
-
-escreveAssento4 :: String -> IO()
-escreveAssento4 n = do
 
     arq <- openFile "arquivos/assentos_economico_disponivel.txt" WriteMode
     hPutStr arq n
