@@ -4,6 +4,8 @@ import Util
 import Mensagens
 import System.IO
 import Data.List
+import Control.DeepSeq
+import Control.Exception
 
 
 --- Chama uma das funcionalidades do menu da empresa
@@ -15,7 +17,7 @@ menuEmpresa menu = do
                 if funcionalidade == "1"
                     then do cadastroDeFuncionario menu
                 else if funcionalidade == "2"
-                    then do alterarFuncionario 
+                    then do alteraDadoFuncionario menu
                 else if funcionalidade == "3"
                     then do excluirFuncionario menu
                 else if funcionalidade == "4"
@@ -66,17 +68,35 @@ cadastroDeFuncionario menu = do
                     Mensagens.cadastroEfetuado
 
 -- Altera Funcinário
-alterarFuncionario :: IO()
-alterarFuncionario = do
-    putStr("\nQual a alteração que deseja fazer? ")
-    newValue <- Util.lerEntradaString
+alteraDadoFuncionario :: (IO()) -> IO() 
+alteraDadoFuncionario menu = do
+    arquivo <- readFile "arquivos/funcionarios.txt"
+    
+    putStr("Informe o CPF do Funcionário que deseja alterar: ")
+    cpf <- Util.lerEntradaString
 
-    arq <- openFile "arquivos/funcionarios.txt" WriteMode
-    hPutStr arq newValue
-    hFlush arq
-    hClose arq
+    let lista = ((Data.List.map (split(==',') ) (lines arquivo)))
+    evaluate (force arquivo)
 
-    putStr("\nFuncionário alterado com sucesso!\n")
+    putStr("\nAtualmente temos os seguintes funcionários no sistema: ")
+    print(lista)
+
+    if not (Util.temCadastro cpf lista)
+        then do {Mensagens.usuarioInvalido; excluirFuncionario menu}     
+    else do 
+        putStrLn("Novo nome: ")
+        nome <- Util.lerEntradaString
+
+        let funcionariosExc = Util.primeiraHorarioCpf (Util.opcaoVaga cpf lista)
+        Util.escreveFuncionario ""
+    
+        appendFile "arquivos/funcionarios.txt" (funcionariosExc)
+        
+        let funcionarioStr = cpf ++ "," ++ nome ++ "\n"
+        appendFile "arquivos/funcionarios.txt" (funcionarioStr)
+        putStr("\nFuncionário alterado com sucesso!\n")
+
+    
 -- pergunta ao monitor como fazer atualização ou da head ou do tail da lista
 
 -- Exclusão de um funcionario do sistema da empresa
