@@ -122,16 +122,6 @@ excluirCliente menu = do
 aux :: String -> [String] -> Bool
 aux v (x:xs) = v == x
 
-primeiraCpv :: [[String]] -> String
-primeiraCpv [] = ""
-primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "," ++ (x !! 3) ++ "," ++ (x !! 4) ++ "\n" ++ primeiraCpv xs
-
-valorFinalEst :: String -> Int -> Int -> Int -> Int
-valorFinalEst saida entrada extra getValor =  (((toInt saida) - entrada) * getValor) + extra
-
-toInt :: String -> Int
-toInt s = read (s) :: Int
-
 
 getLinesClientes :: Handle -> IO [String]
 getLinesClientes h = hGetContents h >>= return . lines
