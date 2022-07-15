@@ -249,3 +249,5 @@ opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
                    | otherwise = x:opcaoVaga v xs
 
 
+
+
