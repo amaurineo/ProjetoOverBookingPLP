@@ -16,6 +16,7 @@ split p s =  case dropWhile p s of
                             where (w, s'') = break p s'
 
 
+
 temCadastro :: String -> [[String]] -> Bool
 temCadastro _ [] = False
 temCadastro c (x:xs) | not (headCadastrado c x)  = temCadastro c xs
@@ -23,6 +24,17 @@ temCadastro c (x:xs) | not (headCadastrado c x)  = temCadastro c xs
 
 headCadastrado :: String -> [String] -> Bool
 headCadastrado c (x:xs) = c == x
+
+
+
+temAssento :: String -> [[String]] -> Bool
+temAssento _ [] = False
+temAssento c (x:xs) | not (headAssentoDisponivel c x) = temAssento c xs
+                    | otherwise = True
+
+headAssentoDisponivel :: String -> [String] -> Bool
+headAssentoDisponivel _ [] = False
+headAssentoDisponivel c (x:xs) = c == x
 
 
 exibirAssentos :: IO()
@@ -153,6 +165,38 @@ escreveAssento n = do
     hFlush arq
     hClose arq
 
+escreveAssento1 :: String -> IO()
+escreveAssento1 n = do
+
+    arq <- openFile "arquivos/assentos_disponiveis.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreveAssento2 :: String -> IO()
+escreveAssento2 n = do
+
+    arq <- openFile "arquivos/assentos_indisponiveis.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreveAssento3 :: String -> IO()
+escreveAssento3 n = do
+
+    arq <- openFile "arquivos/assentos_executivo_disponivel.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreveAssento4 :: String -> IO()
+escreveAssento4 n = do
+
+    arq <- openFile "arquivos/assentos_economico_disponivel.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
 auxRecomendar :: String -> [[String]] -> [[String]]
 auxRecomendar _ [] = []
 auxRecomendar v (x:xs) | (aux v x) == False = auxRecomendar v xs
@@ -241,6 +285,15 @@ escreverContratos n = do
 primeiraHorarioCpf :: [[String]] -> String
 primeiraHorarioCpf [] = ""
 primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs
+
+primeiroAssento :: [[String]] -> String
+primeiroAssento [] = ""
+primeiroAssento (x:xs) = head x ++ "\n" ++ primeiroAssento xs
+
+primeiroAssento1 :: [String] -> String
+primeiroAssento1 [] = ""
+primeiroAssento1 (x:xs) = x ++ "\n" ++ primeiroAssento1 xs 
+
 
 --- GERA UMA LISTA DE LISTA SEM A LISTA QUE CONTEM O STRING PASSADO COMO PARÂMETRO ---
 opcaoVaga :: String -> [[String]] -> [[String]]

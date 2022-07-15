@@ -1,6 +1,9 @@
 module Cliente where
+import Control.DeepSeq
+import Control.Exception
 import Util
 import Mensagens
+import Prelude
 import Data.List
 import System.IO
     ( hClose,
@@ -62,6 +65,10 @@ loginCliente menu = do
     else if op == "3"
         then do {listaTodosAssentosDisponiveis menu; loginCliente menu} --- exibir assentos disponiveis
     else if op == "4"
+        then do {realizarCompra menu; loginCliente menu}
+    else if op == "5"
+        then do {renovaAssentos menu; loginCliente menu}
+    else if op == "6"
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginCliente menu}
@@ -79,6 +86,109 @@ verificaCliente menu = do
         then do {putStr"\nBem vindo de volta!\n"; loginCliente menu}
     else do
         {Mensagens.usuarioInvalido; menu}
+
+realizarCompra :: (IO()) -> IO()
+realizarCompra menu = do
+
+    arquivo <- openFile "arquivos/clientes.txt" ReadMode
+    linhasCliente <- getLinesClientes arquivo
+
+    arquivo1 <- readFile "arquivos/assentos_disponiveis.txt"
+    let listaDeAssentosDisponiveis = ((Data.List.map (wordsWhen(==',') ) (lines arquivo1)))
+
+    arquivo2 <- readFile "arquivos/assentos.txt"
+    let listaDeTodosAssentos = ((Data.List.map (wordsWhen(==',') ) (lines arquivo2)))
+ 
+    arquivo3 <- readFile "arquivos/assentos_indisponiveis.txt"
+    let listaDeAssentosIndisponiveis = Data.List.map (Util.split(==',') ) (lines arquivo3)
+
+    arquivo4 <- readFile "arquivos/assentos_economico.txt"
+    let listaDeAssentosEconomico = (lines arquivo4)
+
+    arquivo5 <- readFile "arquivos/assentos_executivo_disponivel.txt"
+    let listaDeAssentosExecutivoDisponivel =  (Data.List.map (wordsWhen(==',') )(lines arquivo5))
+
+    arquivo6 <- readFile "arquivos/assentos_economico_disponivel.txt"
+    let listaDeAssentosEconomicoDisponivel =  (Data.List.map (wordsWhen(==',') )(lines arquivo6))
+
+
+    evaluate (force arquivo1)
+    evaluate (force arquivo2)
+    evaluate (force arquivo3)
+    evaluate (force arquivo4)
+    evaluate (force arquivo5)
+    evaluate (force arquivo6)
+
+    Mensagens.informeCpf
+    cpf <- Util.lerEntradaString
+
+    let listaDeCliente = ((Data.List.map (wordsWhen(==',') ) (linhasCliente)))
+
+    if not (Util.temCadastro cpf listaDeCliente)
+        then do {Mensagens.usuarioInvalido; realizarCompra menu}
+    else do
+        putStr("Qual tipo de classe vc deseja? [1]Executivo ou [2]Economico\n")
+        tipoClasse <- Util.lerEntradaString
+     
+        if (tipoClasse == "1")
+            then do
+                putStr("Os assentos disponíveis são: ")
+                print(listaDeAssentosExecutivoDisponivel)
+
+                putStr("Qual assento você deseja? ")
+                tipoAssento <- Util.lerEntradaString
+
+                if not (Util.temAssento tipoAssento listaDeAssentosExecutivoDisponivel)
+                    then do {Mensagens.assentoInvalido; realizarCompra menu}
+                else do
+                    let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "125" ++ "\n"
+                    appendFile "arquivos/compra.txt" (assentoStr)
+
+                    let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosExecutivoDisponivel)
+                    Util.escreveAssento3 ""
+                    appendFile "arquivos/assentos_executivo_disponivel.txt" (aux)
+        
+        else if (tipoClasse == "2")
+            then do
+                putStr("Os assentos disponíveis são: ")
+                print(listaDeAssentosEconomicoDisponivel)
+
+                putStr("Qual assento você deseja? ")
+                tipoAssento <- Util.lerEntradaString
+
+                if not (Util.temAssento tipoAssento listaDeAssentosEconomicoDisponivel)
+                    then do {Mensagens.assentoInvalido; realizarCompra menu}
+                else do
+                    let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "50" ++ "\n"
+                    appendFile "arquivos/compra.txt" (assentoStr)
+
+                    let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosEconomicoDisponivel)
+                    Util.escreveAssento4 ""
+                    appendFile "arquivos/assentos_economico_disponivel.txt" (aux)
+
+        else
+            Mensagens.opcaoInvalida
+
+
+renovaAssentos :: (IO()) -> IO()
+renovaAssentos menu = do
+    arquiv1 <- readFile "arquivos/assentos_executivo.txt"
+    let listaDeTodosAssentosExecutivo = (lines arquiv1)
+    let x = Util.primeiroAssento1(listaDeTodosAssentosExecutivo)
+    
+
+    arquiv2 <- readFile "arquivos/assentos_economico.txt"
+    let listaDeTodosAssentosEconomico = (lines arquiv2)
+    let y = Util.primeiroAssento1(listaDeTodosAssentosEconomico)
+
+    evaluate (force arquiv1)
+    evaluate (force arquiv2)
+
+    Util.escreveAssento1 ""
+    Util.escreveAssento2 ""
+    appendFile "arquivos/assentos_executivo_disponivel.txt" (x)
+    appendFile "arquivos/assentos_economico_disponivel.txt" (y)
+
 
 -- alterar cadastro do cliente
 alteraDadoCliente :: (IO()) -> IO()
