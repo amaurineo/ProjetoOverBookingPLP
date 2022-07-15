@@ -7,12 +7,12 @@ import Control.DeepSeq
 import Control.Exception
 
 -- Recebe cpf do funcionário
-cpfFuncionario :: IO()
+cpfFuncionario :: IO() --É UTILIZADO
 cpfFuncionario = do
     putStrLn "\nInforme seu CPF para fazer o login: "
 
 -- Verifica se o cpf está cadastrado no sistema
-verificaFuncionario :: (IO()) -> IO()
+verificaFuncionario :: (IO()) -> IO() --É UTILIZADO
 verificaFuncionario menu = do 
     cpfFuncionario
     cpf <- Util.lerEntradaString
@@ -26,7 +26,7 @@ verificaFuncionario menu = do
         {Mensagens.usuarioInvalido; menu}
 
 --realiza o login do funcionario
-logaFuncionario :: IO() -> IO()
+logaFuncionario :: IO() -> IO() --É UTILIZADO
 logaFuncionario menu = do
     Mensagens.menuFuncionario
 
@@ -121,47 +121,6 @@ excluirCliente menu = do
 
 aux :: String -> [String] -> Bool
 aux v (x:xs) = v == x
-
-calcularValorPassagem :: IO() -> IO()
-calcularValorPassagem menu = do
-    Mensagens.getCpf
-    cpf <- Util.lerEntradaString
-
-    arq <- readFile "arquivos/clientes.txt"
-    let lista = Data.List.map (Util.split(==',') ) (lines arq)
-
-    if Util.temCadastro cpf lista
-        then do {calculo cpf; logaFuncionario menu}
-    else do
-        {Mensagens.usuarioInvalido; logaFuncionario menu}
-
-calculo :: String -> IO()
-calculo cpf = do
-    arq <- readFile "arquivos/horario-cpf.txt"
-    let lista = Data.List.map (split(==',') ) (lines arq)
-    let servicoFilt = Util.auxRecomendar cpf lista
-
-    if lista == []
-        then do Mensagens.usuarioInvalido
-    else do
-
-        let getVaga = Util.getIndiceCpv(Util.getVagaCpv cpf lista) ++ "," ++ "\n"
-        appendFile "arquivos/assentos.txt" getVaga
-
-        Util.escreverCpv (primeiraCpv (Util.opcaoAssento cpf lista))
-
-        Util.escreverHorarioCpf (primeiraCpv (Util.opcaoAssento cpf lista))
-
-        arqClientes <- readFile "arquivos/clientes.txt"
-        let lista2 = Data.List.map (split(==',') ) (lines arqClientes)
-
-        valor <- readFile "arquivos/valorAssento.txt"
-        let lista3 = lines valor
-
-        Mensagens.valorPago cpf lista2
-        print(valorFinalEst "20" (dizHoraInt (horaCpf cpf lista)) (extraInt servicoFilt) (toInt(lista3 !! 0)))
-
-        putStr""
 
 
 primeiraCpv :: [[String]] -> String
