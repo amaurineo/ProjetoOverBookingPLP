@@ -36,7 +36,9 @@ menuFuncionario = do
     putStrLn"[6] Cadastrar cliente no sistema"
     putStrLn"[7] Alterar dado do cliente"
     putStrLn"[8] Recomendar assento"
-    putStrLn"[9] Voltar ao menu principal\n"
+    putStrLn"[9] Voltar ao menu principal"
+    putStrLn"[10] Exibir assentos indisponíveis"
+    putStrLn"[11] Exibir valores para cada tipo de assento\n"
 
 
 exibirListaClientesCadastrados :: IO()

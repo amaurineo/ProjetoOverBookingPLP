@@ -52,6 +52,10 @@ logaFuncionario menu = do
         then do {recomendaAssento menu; logaFuncionario menu}
     else if op == "9"
         then do menu
+    else if op == "10"
+        then do {listaTodosAssentosIndisponiveis menu; logaFuncionario menu}
+    else if op == "11"
+        then do {listaValores menu; logaFuncionario menu}
     else do
         {Mensagens.opcaoInvalida; logaFuncionario menu}
 
@@ -244,6 +248,24 @@ cadastrarCliente menu = do
 getLinesAssentos :: Handle -> IO [String]
 getLinesAssentos h = hGetContents h >>= return . lines
 
+
+listaValores:: (IO()) -> IO()
+listaValores menu = do
+                arquivo <- openFile "arquivos/valoresDeCadaTipo.txt" ReadMode
+                linhasAssentos <- getLinesAssentos arquivo
+                let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
+                putStr("\nTemos os seguintes valores para nossos assentos:")
+                print(listaDeAssentos)
+
+listaTodosAssentosIndisponiveis:: (IO()) -> IO()
+listaTodosAssentosIndisponiveis menu = do
+                arquivo <- openFile "arquivos/assentos_indisponiveis.txt" ReadMode
+                linhasAssentos <- getLinesAssentos arquivo
+                let listaDeAssentos = ((Data.List.map (split(==',') ) linhasAssentos))
+                putStr("\nAtualmente os seguintes assentos estão indisponíveis: ")
+                print(listaDeAssentos)
+
+
 listaTodosAssentosDisponiveis:: (IO()) -> IO()
 listaTodosAssentosDisponiveis menu = do
                 arquivo <- openFile "arquivos/assentos.txt" ReadMode
@@ -319,10 +341,13 @@ realizarCompra menu = do
     arquivo6 <- readFile "arquivos/assentos_economico_disponivel.txt"
     let listaDeAssentosEconomicoDisponivel =  (Data.List.map (split(==',') )(lines arquivo6))
 
+    arquivo7 <- readFile "arquivos/assentos_indisponiveis.txt"
+
     evaluate (force arquivo1)
     evaluate (force arquivo2)
     evaluate (force arquivo5)
     evaluate (force arquivo6)
+    evaluate (force arquivo7)
 
     Mensagens.informeCpf
     cpf <- Util.lerEntradaString
@@ -348,6 +373,7 @@ realizarCompra menu = do
                 else do
                     let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "350" ++ "\n"
                     appendFile "arquivos/compra.txt" (assentoStr)
+                    appendFile "arquivos/assentos_indisponiveis.txt" (tipoAssento ++ "\n")
 
                     let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosExecutivoDisponivel)
                     Util.escreveAssento1 ""
@@ -366,6 +392,7 @@ realizarCompra menu = do
                 else do
                     let assentoStr = cpf ++ "," ++ tipoAssento ++ "," ++ "150" ++ "\n"
                     appendFile "arquivos/compra.txt" (assentoStr)
+                    appendFile "arquivos/assentos_indisponiveis.txt" (tipoAssento ++ "\n")
 
                     let aux = Util.primeiroAssento(Util.opcaoVaga tipoAssento listaDeAssentosEconomicoDisponivel)
                     Util.escreveAssento2 ""
