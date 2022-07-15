@@ -7,12 +7,12 @@ import Control.DeepSeq
 import Control.Exception
 
 -- Recebe cpf do funcionário
-cpfFuncionario :: IO() --É UTILIZADO
+cpfFuncionario :: IO()
 cpfFuncionario = do
     putStrLn "\nInforme seu CPF para fazer o login: "
 
 -- Verifica se o cpf está cadastrado no sistema
-verificaFuncionario :: (IO()) -> IO() --É UTILIZADO
+verificaFuncionario :: (IO()) -> IO()
 verificaFuncionario menu = do 
     cpfFuncionario
     cpf <- Util.lerEntradaString
@@ -26,7 +26,7 @@ verificaFuncionario menu = do
         {Mensagens.usuarioInvalido; menu}
 
 --realiza o login do funcionario
-logaFuncionario :: IO() -> IO() --É UTILIZADO
+logaFuncionario :: IO() -> IO()
 logaFuncionario menu = do
     Mensagens.menuFuncionario
 
@@ -91,11 +91,11 @@ escolheAssento = do
     putStr""
 
 --TALVEZ isso cause um erro (não causa)
-getlines :: Handle -> IO [String] --É UTILIZADO
+getlines :: Handle -> IO [String]
 getlines h = hGetContents h >>= return . lines
 
 -- exclusão do cliente
-excluirCliente :: IO() -> IO() --É UTILIZADO
+excluirCliente :: IO() -> IO()
 excluirCliente menu = do
     putStrLn"Informe o CPF do cliente que deseja excluir: "
     cpf <- Util.lerEntradaString

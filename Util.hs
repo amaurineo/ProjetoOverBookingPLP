@@ -3,7 +3,7 @@ import System.IO
 import Data.List
 
 
-lerEntradaString :: IO String
+lerEntradaString :: IO String 
 lerEntradaString = do
     getLine
 
