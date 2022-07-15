@@ -1,5 +1,6 @@
-A5,executivo
-A5,executivo
-A5,executivo
-A5,executivo
-
+A1,economico
+A3,executivo
+A4,economico
+A6,executivo
+A7,economico
+A9,economico
